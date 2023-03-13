@@ -1,0 +1,6 @@
+{% for msg in app.session.flashBag.get('info') %}
+    <script>
+        const str = "{{ msg }}";
+        window.alert(str);
+    </script>
+{% endfor %}

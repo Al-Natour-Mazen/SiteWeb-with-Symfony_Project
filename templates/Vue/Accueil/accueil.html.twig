@@ -1,0 +1,31 @@
+{% extends "Layouts/body.html.twig" %}
+
+{% block stylesheet %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/Vue/Accueil/Accueil.css') }}" type="text/css">
+{% endblock%}
+
+{% block vue %}
+    <div id="Accueil_texte">
+        Bienvenue Dans notre site de vente. Ce site vous permet d'acheter les salles du bâtiment D'enseignement
+        (pour les plus intimes, le BE) qui se trouvent sur le Futurscope, vous trouverez son adresse
+        <a href="https://goo.gl/maps/RVgzCSXCNr3kunEE9" target="_blank">ici</a> n'hésitez pas à découvrir nos
+        produits de qualité et de surtout passer commande 😉. <br>
+        Nous livrons nos produits rapidement !
+        La garantie est prise en charge par L'Université de Poitiers.
+    </div>
+    <div id="Accueil_Images">
+        <section class="Devant">
+            <img src="" alt="Une photo du BE EXT (à ajouter apres)" width="100px" height="100px" title=""></li>
+        </section>
+        <section class="Devant">
+            <img src="" alt="Une photo du BE INT (à ajouter apres)" width="100px" height="100px" title=""></li>
+        </section>
+        <section class="Devant">
+            <img src="" alt="Une photo du BE ETAGE (à ajouter apres)" width="100px" height="100px" title=""></li>
+        </section>
+
+    </div>
+
+{% endblock %}
+

@@ -1,0 +1,130 @@
+h1{
+    text-align: center;
+    color: #9fd3c7;
+    font-family: "Book Antiqua";
+    border-style: wave;
+    border-radius: 10px;
+    border-color: #175b52;
+    width: 750px;
+    margin: 10px auto;
+    background: linear-gradient(to right bottom, cornflowerblue, dodgerblue);
+    overflow: hidden;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right bottom, #142d4c, #385170);
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Lexend Deca', sans-serif;
+    color: #878787;
+    text-align: center;
+
+    --menu-item-size: 50px;
+    --green-color: #6796e5;
+    --blue-color: #099c95;
+    --white-color: #FFF;
+    --gray-color: #EDEDED;
+    --container-width: 700px;
+    --container-height: 400px;
+    --line-offset: calc((100% - var(--container-height))/ 2 + var(--menu-item-size) + 0.6em);
+}
+
+
+/***************************************************************/
+/* On gere ici les effets de styles pour la menuBar            */
+/***************************************************************/
+.main-menu {
+    display: flex;
+    list-style: none;
+    margin: auto;
+    padding: 0.6em 0 0 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-menu > li {
+    box-sizing: border-box;
+    height: var(--menu-item-size);
+    width: calc(3.5 * var(--menu-item-size));
+    line-height: var(--menu-item-size);
+    padding: 0 2em;
+    margin: 1px;
+    transition: 0.5s linear all;
+    background: var(--green-color);
+    color: #175b52;
+    font-size: 15px;
+
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.main-menu > li a:link,
+.main-menu > li a:visited  {
+    text-decoration: none;
+    color:White;
+    font-family: Bahnschrift;
+}
+.main-menu > li:not(.with-submenu) {
+    clip-path: polygon(10% 0%, 0% 100%, 95% 100%, 100% 50%, 95% 0%);
+    shape-outside: polygon(10% 0%, 0% 100%, 95% 100%, 100% 50%, 95% 0%);
+}
+.main-menu > li:nth-child(2) {
+    transform: translateX(-5%);
+}
+.main-menu > li:nth-child(3) {
+    transform: translateX(-10%)
+}
+.main-menu > li:nth-child(4) {
+    transform: translateX(-15%)
+}
+.main-menu > li:hover:not(.active) {
+    background: linear-gradient(to right, var(--green-color),#93c5fd);
+    color: var(--white-color);
+}
+
+
+
+
+
+
+/*
+nav {
+    background-color: darkslategrey;
+    text-align: center;
+    padding: 20px;
+    border-radius: 50px;
+    border:2px black inset;
+    overflow: hidden;
+}
+
+nav a {
+    color: #f2f2f2;
+    padding: 20px 20px ;
+    text-decoration: none;
+    font-size: 17px;
+    height: 40px;
+}
+
+nav a:hover {
+    background-color: #ddd;
+    color: black;
+    border-radius: 50px;
+    height: 10px;
+}
+#menu-image{
+    text-align: right;
+}
+
+*/
+/*
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(to right bottom, #142d4c, #385170);
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Lexend Deca', sans-serif;
+    color: #878787;
+}*/

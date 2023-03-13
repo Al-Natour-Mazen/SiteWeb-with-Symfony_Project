@@ -1,0 +1,30 @@
+{# Template racine (niveau 2) intermediaire #}
+{% extends "Layouts/base.html.twig" %}
+
+{% block body %}
+
+    {% block menu %}
+        {{ render(controller('App\\Controller\\AccueilController::menuAction')) }}
+    {% endblock %}
+    {% block stylesheet %}
+        <link rel="stylesheet" href="{{ asset('css/Layouts/Footer.css') }}" type="text/css">
+    {% endblock%}
+
+    <div id="flash_msg">
+        {% block flash %}
+            {% include("Layouts/flash.html.twig") %}
+        {% endblock %}
+    </div>
+
+    <div id="vue">
+        {% block vue %}{% endblock %}
+    </div>
+
+    <div id="footer">
+        <footer>
+            {% block footer %}
+                {% include("Layouts/footer.html.twig") %}
+            {% endblock %}
+        </footer>
+    </div>
+{% endblock %}

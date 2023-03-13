@@ -1,0 +1,40 @@
+{% block menu %} {# {{ path('') }}  {{ asset('') }}#}
+    <nav class="menu">
+        <ul class="main-menu">
+                {% if isAuth == false %}
+                    <li> <a href="{{ path('app_accueil') }}">Accueil </a></li>
+                    <li><a href="{{ path('account_connect') }}">Connexion</a></li>
+                    <li><a href="{{ path('account_createAccount') }}">Créer un compte</a></li>
+                {% else %}
+                    {%if isSuperAdmin == true %}
+                        <li> <a href="{{ path('account_editProfile') }}">Gérer Mon profil</a></li>
+                        <li> <a href="">Créer un admin</a></li> <li>
+                        <a href="{{ path('app_accueil') }}">Accueil </a></li>
+                    {% endif %}
+                    {% if isAdmin == true %}
+                        <li><a href="">Gérer les clients</a></li>
+                        <li> <a href="">Créer un produit</a></li>
+                        <li> <a href="https://fr.wikipedia.org/wiki/The Truman Show" target="_blank" >The Truman Show</a></li>
+                    {% endif %}
+                    {% if isClient == true %}
+                        <li> <a href="{{ path('app_accueil') }}">Accueil </a></li>
+                        <li> <a href="{{ path('product_productList') }}">Liste Des produits</a></li>
+                        <li> <a href="">Mon panier </a></li>
+                        <li> <a href="{{ path('account_editProfile') }}">Gérer le profil</a></li>
+                    {% endif %}
+
+                    <li><a href="{{ path('account_disconnect') }}">Déconnexion</a></li>
+                {% endif %}
+                {% if isAuth == false %}
+                <li><img src="{{ asset('images/anonyme.png') }}" alt="Utilisateur pas connecté" width="100px" height="100px" title="Vous êtes un Utilisateur Anonyme"></li>
+                {% else %}
+                    {% if isAdmin == true%}
+                <li><img src="{{ asset('images/Admin.png') }}" alt="Admin connecté" width="50px" height="50px" title="Vous êtes un Admin" ></li>
+                    {% endif %}
+                    {%if isSuperAdmin == true %}
+                <li><img src="{{ asset('images/SuperAdmin.png') }}" alt="SuperAdmin connecté" width="50px" height="50px" title="Vous êtes un SuperAdmin"></li>
+                    {% endif %}
+                {% endif %}
+        </ul>
+    </nav>
+{% endblock %}
