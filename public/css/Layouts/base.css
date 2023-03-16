@@ -1,8 +1,7 @@
 h1{
     text-align: center;
     color: #9fd3c7;
-    font-family: "Book Antiqua";
-    border-style: wave;
+    font-family: "Book Antiqua", serif;
     border-radius: 10px;
     border-color: #175b52;
     width: 750px;
@@ -83,48 +82,3 @@ body {
     background: linear-gradient(to right, var(--green-color),#93c5fd);
     color: var(--white-color);
 }
-
-
-
-
-
-
-/*
-nav {
-    background-color: darkslategrey;
-    text-align: center;
-    padding: 20px;
-    border-radius: 50px;
-    border:2px black inset;
-    overflow: hidden;
-}
-
-nav a {
-    color: #f2f2f2;
-    padding: 20px 20px ;
-    text-decoration: none;
-    font-size: 17px;
-    height: 40px;
-}
-
-nav a:hover {
-    background-color: #ddd;
-    color: black;
-    border-radius: 50px;
-    height: 10px;
-}
-#menu-image{
-    text-align: right;
-}
-
-*/
-/*
-body {
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(to right bottom, #142d4c, #385170);
-    width: 100vw;
-    height: 100vh;
-    font-family: 'Lexend Deca', sans-serif;
-    color: #878787;
-}*/

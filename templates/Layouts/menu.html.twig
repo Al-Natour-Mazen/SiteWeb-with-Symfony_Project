@@ -7,9 +7,9 @@
                     <li><a href="{{ path('account_createAccount') }}">Créer un compte</a></li>
                 {% else %}
                     {%if isSuperAdmin == true %}
+                        <li> <a href="{{ path('app_accueil') }}">Accueil </a></li>
                         <li> <a href="{{ path('account_editProfile') }}">Gérer Mon profil</a></li>
-                        <li> <a href="">Créer un admin</a></li> <li>
-                        <a href="{{ path('app_accueil') }}">Accueil </a></li>
+                        <li> <a href="{{ path('admin_createAdmin') }}">Créer un admin</a></li>
                     {% endif %}
                     {% if isAdmin == true %}
                         <li><a href="">Gérer les clients</a></li>

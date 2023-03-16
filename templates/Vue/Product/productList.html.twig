@@ -6,9 +6,43 @@
 
 {% block stylesheet %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/Vue/Products/productList.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/Vue/Products/ListProduct.css') }}">
 {% endblock%}
 
 {% block vue %}
-
+    <div id="PorductList">
+        <form method="POST" action="">
+            <table>
+                <tr>
+                    <td colspan="4"><h2>Liste des Salles Disponibles à la vente</h2></td>
+                </tr>
+                <tr>
+                    <th>Label</th>
+                    <th>Prix unitaire</th>
+                    <th>Quantité en stock</th>
+                    <th>Choix</th>
+                </tr>
+                {% for produit in produits %}
+                    <tr>
+                        <td>{{ produit.libelle }} </td>
+                        <td>{{ produit.prixUnitaire }} </td>
+                        <td>{{ produit.quantite }} </td>
+                        <td>
+                            {% if produit.quantite > 0 %}
+                                    <select name="quantite">
+                                        {% for i in 0..produit.quantite %}
+                                            <option value="{{ i }}" {% if i == 0 %}selected{% endif %}>{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <button id="BtnModifier" type="submit">Modifier</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </form>
+    </div>
 {% endblock %}
+{# {{ path('produit_modifier', {'id': produit.id}) }} #}
+
+{#   #}

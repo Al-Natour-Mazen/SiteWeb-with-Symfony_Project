@@ -21,6 +21,8 @@ class AdminController extends AbstractController
     #[Route('/createAdmin', name: 'createAdmin')]
     public function createAdminAction(EntityManagerInterface $em , Request $requete): Response
     {
+        // il faut verifier si l'utilisateur est un superadmin sinon pas le droit d'acceder ici
+
         // creation de la nouvelle personne
         $NewAdmin = new User();
 
@@ -40,6 +42,6 @@ class AdminController extends AbstractController
             'myform' => $form->createView(),
         );
 
-        return $this->render('Vue/Account/createAccount.html.twig', $args);
+        return $this->render('/Vue/Admin/createAdmin.html.twig', $args);
     }
 }
