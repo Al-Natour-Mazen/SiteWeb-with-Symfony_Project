@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\OrderRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'i23_orders')]
 #[ORM\UniqueConstraint(columns: ['id_produit', 'id_client'])]
@@ -24,6 +25,7 @@ class Order
     private ?User $client = null;
 
     #[ORM\Column]
+    #[Assert\PositiveOrZero]
     private ?int $quantite = null;
 
     public function getId(): ?int

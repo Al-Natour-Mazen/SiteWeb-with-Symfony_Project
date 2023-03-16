@@ -9,6 +9,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name:'i23_users')]
 #[ORM\UniqueConstraint(columns: ['nom', 'prenom'])]
@@ -21,6 +22,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 3,
+        max: 180,
+        minMessage: 'Identifiant trop court.',
+        maxMessage: 'Identifiant trop long.',
+    )]
     private ?string $login = null;
 
     #[ORM\Column]
@@ -30,18 +38,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 4,
+        minMessage: 'Insérez un mot de passe plus long.',
+    )]
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        max: 50,
+        maxMessage: 'Un nom de famille n\'a pas plus de {{ limit }} caractères.',
+    )]
     private ?string $nom = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: 'Un prénom n\'a pas plus de {{ limit }} caractères.',
+    )]
+
     private ?string $prenom = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\Range(
+        minMessage: 'La technopole a été fondée en {{ limit }}',
+        min: 1987,
+    )]
+    #[Assert\Range(
+        maxMessage: 'La technnopole a disparue en {{ limit }}',
+        max: 2207,
+    )]
     private ?\DateTimeInterface $dateNaissance = null;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Order::class)]
+    #[Assert\Valid]
     private Collection $orders;
 
     public function __construct()

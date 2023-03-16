@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name:'i23_produits')]
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
@@ -18,19 +19,29 @@ class Produit
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING,length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min:3,
+        max:255,
+        minMessage: 'Il faut au moins {{ limit }} caractères',
+        maxMessage: 'Trop de caractères insérés ; la limite est {{ limit }}',
+    )]
     private ?string $libelle = null;
 
     #[ORM\Column(
-        name: 'prix_unitaire',      // inutile mais pour vous montrer qu'on a bien comprit
+        name: 'prix_unitaire',
         type: Types::FLOAT,
         options: ['comment' => 'en euros'],
     )]
+    #[Assert\PositiveOrZero]
     private ?float $prixUnitaire = null;
 
     #[ORM\Column(type: Types::INTEGER)]
+    #[Assert\PositiveOrZero]
     private ?int $quantite = null;
 
     #[ORM\OneToMany(mappedBy: 'produit', targetEntity: Order::class)]
+    #[Assert\Valid]
     private Collection $orders;
 
     public function __construct()
