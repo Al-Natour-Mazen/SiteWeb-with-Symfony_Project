@@ -65,11 +65,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\Range(
         minMessage: 'La technopole a été fondée en {{ limit }}',
-        min: 1987,
+        min: '1987-01-01',
     )]
     #[Assert\Range(
         maxMessage: 'La technnopole a disparue en {{ limit }}',
-        max: 2207,
+        max: '2207-01-01',
     )]
     private ?\DateTimeInterface $dateNaissance = null;
 
