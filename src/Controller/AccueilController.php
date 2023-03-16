@@ -24,10 +24,10 @@ class AccueilController extends AbstractController
     public function menuAction(): Response
     {
         $args = array(
-            'isAuth'=> false,
+            'isAuth'=> true,
             'isAdmin' => false,
-            'isSuperAdmin' => true,
-            'isClient' => false,
+            'isSuperAdmin' => false,
+            'isClient' => true,
         );
         return $this->render('Layouts/menu.html.twig', $args);
     }

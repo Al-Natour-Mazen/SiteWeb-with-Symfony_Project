@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Config\Doctrine\Orm\EntityManagerConfig;
 use Symfony\Component\Form\FormTypeInterface;
@@ -58,11 +59,10 @@ class AccountController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
             $TheNewOne->setRoles(['CLIENT']);
-            dump($TheNewOne);
             $em->persist($TheNewOne);
             $em->flush();
             $this->addFlash('info','Votre compte Client a été créer !');
-            $this->redirectToRoute('app_accueil');
+            return $this->redirectToRoute('app_accueil');
         }
 
         $args=array(
@@ -75,11 +75,37 @@ class AccountController extends AbstractController
     /***************************************************/
     /*                Edition d'un compte
     /***************************************************/
-    #[Route('/editProfile', name: 'editProfile')]
-    public function editProfileAction(): Response
+    #[Route('/editProfile',
+        name: 'editProfile',
+    )]
+    public function editProfileAction(EntityManagerInterface $em , Request $requete): Response
     {
+        $login = "malnatou"; // on le fait en dur pour le moment quand on aura l'auth on recupere l'utilisateur connecte
 
-        return $this->render('Vue/Account/editProfile.html.twig');
+        $userrepository = $em->getRepository(User::class);
+        $user = $userrepository->findOneBy(['login' => $login]);
+
+        if(is_null($user))
+            throw new NotFoundHttpException('Ce Client avec ce Login : ' . $login . ' n\'existe pas');
+
+        $form = $this->createForm(UserType::class,$user);
+        $form->add('modify',SubmitType::class,['label' => 'modifier votre profile']);
+        $form->handleRequest($requete);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $em->flush();
+            $this->addFlash('info','Votre compte a été modifier !');
+            if($user->getRoles()[0] === "CLIENT")
+                return $this->redirectToRoute('product_Listproduct');
+            else if ($user->getRoles()[0] === "SUPER_ADMIN" )
+                return $this->redirectToRoute('app_accueil');
+        }
+
+        $args=array(
+            'myform' => $form->createView(),
+        );
+
+        return $this->render('Vue/Account/editProfile.html.twig',$args);
     }
 
 }

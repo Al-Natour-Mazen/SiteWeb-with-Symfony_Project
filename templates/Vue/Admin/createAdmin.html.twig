@@ -1,16 +1,16 @@
 {% extends "Layouts/body.html.twig" %}
 
 {% block main_title %}
-    {{ parent() }} : Gérer son Profile
+    {{ parent() }} : Création De Compte
 {% endblock %}
 
 {% block stylesheet %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/Vue/editProfile.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/Vue/createAccount.css') }}" type="text/css">
 {% endblock%}
 
 {% block vue %}
-
+    {# WORK IN PROGRESS #}
     {{ form(myform) }}
 {% endblock %}
 

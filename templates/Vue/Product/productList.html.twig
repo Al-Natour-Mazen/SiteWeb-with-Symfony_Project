@@ -10,37 +10,5 @@
 {% endblock%}
 
 {% block vue %}
-    <div id="PorductList">
-            <h2>Liste des salles disponibles à acheter dans notre magasin</h2>
-            <form action="{{ path('product_productList') }}" method="post">
-                <table>
-                    <tr>
-                        <th>Label</th>
-                        <th>Prix</th>
-                        <th>Stock</th>
-                        <th>Choix</th>
-                    </tr>
-                    {% for order in orders %}
-                        <tr>
-                            <td>{{ order.product.label }}</td>
-                            <td>{{ order.product.price }}</td>
-                            <td>{{ order.product.quantity }}</td>
-                            <td>
-                                {% if order.product.quantity > 0 %}
-                                    <label>
-                                        <select name="{{ order.product.id }}">
-                                            {% for i in 0..(order.product.quantity) %}
-                                                <option value="{{ i }}">{{ i }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </label>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-                <input id="BtnModifier" type="submit" value="Modifier">
-            </form>
-    </div>
-{% endblock %}
 
+{% endblock %}
