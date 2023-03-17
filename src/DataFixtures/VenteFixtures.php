@@ -18,7 +18,12 @@ class VenteFixtures extends Fixture
         $produitAmphi
             ->setLibelle('Amphi BE')
             ->setPrixUnitaire(135000)
-            ->setQuantite(0);
+            ->setQuantite(0)
+            ->setDescription(
+                'Grande superficie de beaucoup de mètres carrés disposée en amphithéatre. ' .
+                'Vient avec 270 sièges ainsi que des tables sur toute la longueur de la pièce. ' .
+                'Grand bureau en tête accompagné d\'un double tableau.'
+            );
         $em->persist($produitAmphi);
 
         $produit02 = new Produit();
@@ -32,14 +37,22 @@ class VenteFixtures extends Fixture
         $produit11
             ->setLibelle('Salle BE11')
             ->setPrixUnitaire(15000)
-            ->setQuantite(1);
+            ->setQuantite(1)
+            ->setDescription(
+                'Une de nos plus grandes pièces. Voisinage avec les propriétaires de la BE 13. ' .
+                'Dispose de 30 places équipées d\'ordinateurs de compétitions (non). ' .
+                'Grande surface libre sur le côté.'
+            );
         $em->persist($produit11);
 
         $produit13 = new Produit();
         $produit13
             ->setLibelle('Salle BE13')
             ->setPrixUnitaire(10000)
-            ->setQuantite(1);
+            ->setQuantite(1)
+            ->setDescription(
+                'Voisinage avec les propriétaires de la BE 11. 20 places avec ordinateurs.'
+            );
         $em->persist($produit13);
 
         $produit14 = new Produit();
@@ -53,7 +66,11 @@ class VenteFixtures extends Fixture
         $produit15
             ->setLibelle('Salle BE15')
             ->setPrixUnitaire(18000)
-            ->setQuantite(0);
+            ->setQuantite(0)
+            ->setDescription(
+                'Notre plus grande pièce après l\'amphithéâtre. Dispose de 36 places et ' .
+                'beaucoup de passage espacé pour circuler. P.S : Le tableau ne se nettoie pas.'
+            );
         $em->persist($produit15);
 
         $produit18 = new Produit();
@@ -74,7 +91,12 @@ class VenteFixtures extends Fixture
         $produitDemande
             ->setLibelle('Salle sur demande')
             ->setPrixUnitaire(1)
-            ->setQuantite(982);
+            ->setQuantite(982)
+            ->setDescription(
+                'Parfois, elle est là, parfois, elle n\'y est pas, mais quand elle apparait, ' .
+                'elle contient toujours ce qu\'on cherche. ' .
+                'Se débloque lorsqu\'on parle avec Mr.Subrenat moins d\'une minute (impossible).'
+            );
         $em->persist($produitDemande);
 
 
