@@ -44,8 +44,12 @@ class Produit
     #[Assert\Valid]
     private Collection $orders;
 
+    #[ORM\Column(length: 500, nullable: true, options: ['default' => null])]
+    private ?string $description = null;
+
     public function __construct()
     {
+        $this->description = null;
         $this->orders = new ArrayCollection();
     }
 
@@ -116,6 +120,18 @@ class Produit
                 $order->setProduit(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }
