@@ -85,7 +85,7 @@ class VenteFixtures extends Fixture
         $userSAdmin
             ->setLogin('sadmin')
             ->setPassword('nimdas')
-            ->setRoles(array('SUPER_ADMIN'))
+            ->setRoles(array('ROLE_SUPERADMIN'))
             ->setNom('Super')
             ->setPrenom('Man')
             ->setDateNaissance(\DateTime::createFromFormat('Y-m-d', "2023-03-15"));
@@ -95,7 +95,7 @@ class VenteFixtures extends Fixture
         $userGilles
             ->setLogin('gilles')
             ->setPassword('sellig')
-            ->setRoles(array('ADMIN'))
+            ->setRoles(array('ROLE_ADMIN'))
             ->setNom('Subrenat')
             ->setPrenom('Gilles')
             ->setDateNaissance(new \DateTime());     // on préfère éviter de faire chuter notre note
@@ -105,7 +105,7 @@ class VenteFixtures extends Fixture
         $userRita
             ->setLogin('rita')
             ->setPassword('atir')
-            ->setRoles(array('CLIENT'))
+            ->setRoles(array('ROLE_CLIENT'))
             ->setNom('Zrour')
             ->setPrenom('Rita')
             ->setDateNaissance(new \DateTime());    // toujours pas
@@ -115,7 +115,7 @@ class VenteFixtures extends Fixture
         $userSimon
             ->setLogin('simon')
             ->setPassword('nomis')
-            ->setRoles(array('CLIENT'))
+            ->setRoles(array('ROLE_CLIENT'))
             ->setNom('Un')
             ->setPrenom('Simon')
             ->setDateNaissance(\DateTime::createFromFormat('Y-m-d', "1980-02-29"));
