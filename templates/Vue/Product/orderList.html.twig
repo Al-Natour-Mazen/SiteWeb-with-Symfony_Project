@@ -1,0 +1,39 @@
+{% extends "Layouts/body.html.twig" %}
+
+{% block main_title %}
+    {{ parent() }} : Mon Panier
+{% endblock %}
+
+{% block stylesheet %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/Vue/Products/OrderList.css') }}" type="text/css">
+{% endblock%}
+
+{% block vue %}
+    <h2>Mon Panier</h2>
+    {% if produits is empty %}
+        <p>Votre panier est vide.</p>
+    {% else %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Prix unitaire</th>
+                    <th>Quantité</th>
+                    <th>Prix total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for produit in produits %}
+                    <tr>
+                        <td>{{ produit.produit.libelle }}</td>
+                        <td>{{ produit.produit.prixUnitaire }} €</td>
+                        <td>{{ produit.quantite }}</td>
+                        <td>{{ produit.produit.prixUnitaire * produit.quantite }} €</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
+

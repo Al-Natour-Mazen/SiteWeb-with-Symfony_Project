@@ -80,7 +80,7 @@ class AccountController extends AbstractController
     )]
     public function editProfileAction(EntityManagerInterface $em , Request $requete): Response
     {
-        $login = "malnatou"; // on le fait en dur pour le moment quand on aura l'auth on recupere l'utilisateur connecte
+        $login = "simon"; // on le fait en dur pour le moment quand on aura l'auth on recupere l'utilisateur connecte
 
         $userrepository = $em->getRepository(User::class);
         $user = $userrepository->findOneBy(['login' => $login]);

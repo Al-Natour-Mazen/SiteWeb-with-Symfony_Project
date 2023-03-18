@@ -4,10 +4,8 @@ namespace App\Form;
 
 use App\Entity\Produit;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -26,8 +24,11 @@ class ProductType extends AbstractType
                 IntegerType::class,
                 ['label' => 'Quantite '])
             ->add('description',
-                TextType::class,
+                TextareaType::class,
                 ['label' => 'Description ',
+                    'attr' => ['placeholder' => 'facultatif',
+                               'style' => 'height : 100px; width: 400px ; resize: none;',
+                               'maxlength' => 500],
                     'required' => false])
         ;
     }

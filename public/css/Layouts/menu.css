@@ -1,0 +1,54 @@
+
+/***************************************************************/
+/* On gere ici les effets de styles pour la menuBar            */
+/***************************************************************/
+.main-menu {
+    display: flex;
+    list-style: none;
+    margin: auto;
+    padding: 0.6em 0 0 0;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.main-menu > li {
+    box-sizing: border-box;
+    height: var(--menu-item-size);
+    width: calc(4.2 * var(--menu-item-size));
+    line-height: var(--menu-item-size);
+    padding: 0 2em;
+    margin: 1px;
+    transition: 0.5s linear all;
+    background: var(--green-color);
+    color: #175b52;
+    font-size: 15px;
+
+    text-align: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.main-menu > li a:link,
+.main-menu > li a:visited  {
+    text-decoration: none;
+    color:White;
+    font-family: Bahnschrift, cursive;
+}
+.main-menu > li:not(.with-submenu) {
+    clip-path: polygon(10% 0%, 0% 100%, 95% 100%, 100% 50%, 95% 0%);
+    shape-outside: polygon(10% 0%, 0% 100%, 95% 100%, 100% 50%, 95% 0%);
+}
+.main-menu > li:nth-child(2) {
+    transform: translateX(-5%);
+}
+.main-menu > li:nth-child(3) {
+    transform: translateX(-10%)
+}
+.main-menu > li:nth-child(4) {
+    transform: translateX(-15%)
+}
+.main-menu > li:hover:not(.active) {
+    background: linear-gradient(to right, var(--green-color),#93c5fd);
+    color: var(--white-color);
+}
