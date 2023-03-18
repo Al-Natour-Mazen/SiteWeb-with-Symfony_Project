@@ -31,7 +31,7 @@ class AdminController extends AbstractController
         $form->handleRequest($requete);
 
         if($form->isSubmitted() && $form->isValid()){
-            $NewAdmin->setRoles(['ADMIN']);
+            $NewAdmin->setRoles(['ROLE_ADMIN']);
             $em->persist($NewAdmin);
             $em->flush();
             $this->addFlash('info','L\'ajout de l\'admin a été effectue !');

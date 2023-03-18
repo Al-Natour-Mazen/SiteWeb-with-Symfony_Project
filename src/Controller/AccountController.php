@@ -95,9 +95,9 @@ class AccountController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             $em->flush();
             $this->addFlash('info','Votre compte a été modifier !');
-            if($user->getRoles()[0] === "CLIENT")
+            if($user->getRoles()[0] === "ROLE_CLIENT")
                 return $this->redirectToRoute('product_Listproduct');
-            else if ($user->getRoles()[0] === "SUPER_ADMIN" )
+            else if ($user->getRoles()[0] === "ROLE_SUPERADMIN" )
                 return $this->redirectToRoute('app_accueil');
         }
 

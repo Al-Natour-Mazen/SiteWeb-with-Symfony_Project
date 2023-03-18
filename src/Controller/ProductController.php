@@ -53,4 +53,16 @@ class ProductController extends AbstractController
         $products = $productsrepository->findAll();
         return $this->render("Vue/Product/productList.html.twig", ['produits' => $products]);
     }
+
+    #[Route('/product/{id}', name: 'product')]
+    public function productAction(int $id,Request $request,EntityManagerInterface $em): ?Response
+    {
+        $quantite = $request->request->get('quantite');
+        $productsrepository = $em->getRepository(Produit::class);
+        $product = $productsrepository->findOneBy(['id' => $id]);
+        dump($product);
+        dump($quantite);
+        return  new Response('<body>Hello World!</body>');
+    }
+
 }

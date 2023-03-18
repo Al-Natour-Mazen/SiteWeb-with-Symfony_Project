@@ -18,13 +18,17 @@ class ProductType extends AbstractType
         $builder
             ->add('libelle',
                 TextType::class,
-                ['label' => 'libelle '])
+                ['label' => 'Libelle  '])
             ->add('prixUnitaire',
                 IntegerType::class,
-                ['label' => 'prixUnitaire '])
+                ['label' => 'PrixUnitaire '])
             ->add('quantite',
                 IntegerType::class,
-                ['label' => 'quantite '])
+                ['label' => 'Quantite '])
+            ->add('description',
+                TextType::class,
+                ['label' => 'Description ',
+                    'required' => false])
         ;
     }
 
