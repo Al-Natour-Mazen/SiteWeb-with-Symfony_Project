@@ -39,9 +39,9 @@ class AccueilController extends AbstractController
 
         $args = array(
             'isAuth'=> true,
-            'isAdmin' => true,
+            'isAdmin' => false,
             'isSuperAdmin' => false,
-            'isClient' => false,
+            'isClient' => true,
             'nbproduit' => $nbproduits,
         );
         return $this->render('Layouts/menu.html.twig', $args);
