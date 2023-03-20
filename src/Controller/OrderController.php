@@ -7,7 +7,6 @@ use App\Entity\Produit;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -73,7 +72,7 @@ class OrderController extends AbstractController
                     $em->flush();
 
                     // Ajout d'un message de confirmation à la page
-                    $this->addFlash('info', 'Produit ajouté au Panier avec succès !');
+                    $this->addFlash('info', 'Produit ajouté au panier avec succès !');
                 }
             }
         }
@@ -100,7 +99,7 @@ class OrderController extends AbstractController
 
 
         // Affichage de la vue du panier
-        return $this->render('Vue/Product/orderList.html.twig', ['produits' => $produits]);
+        return $this->render('Vue/Order/orderList.html.twig', ['produits' => $produits]);
     }
 
 
@@ -180,13 +179,59 @@ class OrderController extends AbstractController
                 $this->addFlash('info', "Le produit a été retiré de votre panier avec succès !");
             } else {
                 // On ajoute un msg flash pour informé
-                $this->addFlash('error', "Le produit n'a pas été trouvé dans votre panier.");
+                $this->addFlash('info', "Le produit n'a pas été trouvé dans votre panier.");
             }
         } else {
             // On ajoute un msg flash pour informé
-            $this->addFlash('error', "Le produit spécifié n'existe pas.");
+            $this->addFlash('info', "Le produit spécifié n'existe pas.");
         }
 
         return $this->redirectToRoute('order_ClientCart');
     }
+
+
+
+    /***************************************************/
+    /*        Commander les produits
+    /***************************************************/
+    #[Route('/placeOrder', name: 'placeOrder')]
+    public function placeOrderAction(EntityManagerInterface $em): Response
+    {
+        $userRepository = $em->getRepository(User::class);
+        $orderRepository = $em->getRepository(Order::class);
+
+        // On récupère le client actuellement connecté
+        // On le fait en dur pour le moment
+        $client = $userRepository->findOneBy(['login' => 'maz12']);
+        $IdClient = $client->getId();
+
+        // On cherche tous les orders liés au client
+        $orders = $orderRepository->findBy(['client' => $IdClient]);
+
+        if($orders){
+            // On vide tous les orders liés à ce client
+            foreach ($orders as $order) {
+                //On enlève l'order de la BD
+                $em->remove($order);
+            }
+
+            // On sauvegarde les changements
+            $em->flush();
+
+
+            $this->addFlash('info',"Votre Commande a été passé, Merci pour votre Confiance !");
+        }
+        else{
+            $this->addFlash('info',"Votre Commande n'est pas passé, Un probléme est survenue !");
+        }
+
+        return $this->redirectToRoute('order_ClientCart');
+    }
+
+
+
+
+
+
+
 }

@@ -6,7 +6,7 @@
 
 {% block stylesheet %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/Vue/Products/OrderList.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/Vue/Order/OrderList.css') }}" type="text/css">
 {% endblock%}
 
 {% block vue %}
@@ -48,7 +48,7 @@
             </table>
             <div class="cart-actions">
                 <a href="{{ path('product_Listproduct') }}">Continuer mes achats</a>
-                <a href="{{ path('app_accueil') }}">Commander</a>
+                <a href="{{ path('order_placeOrder') }}">Commander</a>
                 <a href="{{ path('order_clearCart') }}">Vider Le Panier</a>
             </div>
         {% endif %}
