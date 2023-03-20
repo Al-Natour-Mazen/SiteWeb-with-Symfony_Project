@@ -133,7 +133,7 @@ class ProductController extends AbstractController
 
         //on le fait en dure pour le moment
         $userRepository = $em->getRepository(User::class);
-        $client = $userRepository->findOneBy(['login' => 'maz12']);
+        $client = $userRepository->findOneBy(['login' => 'simon']);
 
         // Récupération de tous les produits dans son panier
         $produits = $client->getOrders();

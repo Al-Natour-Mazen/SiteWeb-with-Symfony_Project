@@ -68,7 +68,7 @@
     background-color: #0062cc;
 }
 
-.EmptyOrder , a:visited{
+.EmptyOrder {
     font-size: 20px;
     font-style: italic;
     padding: 10px;

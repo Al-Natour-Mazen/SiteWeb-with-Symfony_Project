@@ -6,19 +6,20 @@
 
 {% block stylesheet %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/Vue/Products/ListProduct.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Vue/Products/ListProduct.css') }}" type="text/css">
 {% endblock%}
 
 {% block vue %}
 
     {# on inclut les informations de chaque produit dans une div masquée #}
     {% for produit in produits %}
-            <div id="product-info-{{ produit.id }}" class="product-info" style="display:none;">
+            <div id="product-info-{{ produit.id }}" class="product-info" >
                     <h2>{{ produit.libelle }}</h2>
-                    <p>Prix unitaire : {{ produit.prixUnitaire }}</p>
-                    <p>Quantité en stock : {{ produit.quantite }}</p>
+                    <p><label>Prix unitaire :</label>{{ produit.prixUnitaire }} €</p>
+                    <p><label>Quantité en stock :</label>{{ produit.quantite }}</p><br>
                     {% if produit.description != null  %}
-                        <p>Desricption : {{ produit.description }}</p>
+                        <label>Desricption :</label>
+                        <p class="produit-descr"> {{ produit.description }}</p>
                     {% endif %}
                     {% if produit.quantite > 0 %}
                         <form method="POST" action=" {{ path('product_AddporductOrder') }}">
@@ -52,12 +53,21 @@
 
         productSelect.addEventListener('change', (event) => {
             const productId = event.target.value;
-            const productInfoDiv = document.querySelector(`#product-info-${productId}`);
-            productInfo.innerHTML = productInfoDiv.innerHTML;
+            if (productId === '') {
+                productInfo.innerHTML = '';
+                productInfo.classList.remove('has-number');
+            } else {
+                const productInfoDiv = document.querySelector(`#product-info-${productId}`);
+                productInfo.innerHTML = productInfoDiv.innerHTML;
+                productInfo.classList.add('has-number');
+            }
         });
     </script>
 
+
 {% endblock %}
+
+
 {# {{ path('produit_modifier', {'id': produit.id}) }} #}
 
 
