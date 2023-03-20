@@ -13,7 +13,7 @@
     <div class="cart-container">
         <h2>Mon Panier</h2>
         {% if produits is empty %}
-            <p>Votre panier est vide.</p>
+            <p class="EmptyOrder">Votre panier est vide. Venez <a href="{{ path('product_Listproduct') }}">ici</a> pour commander 😉</p>
         {% else %}
             <table class="cart-table">
                 <thead>
@@ -46,7 +46,8 @@
             </table>
             <div class="cart-actions">
                 <a href="{{ path('product_Listproduct') }}">Continuer mes achats</a>
-                <a href="{{ path('') }}">Commander</a>
+                <a href="{{ path('app_accueil') }}">Commander</a>
+                <a href="{{ path('app_accueil') }}">Vider Le Panier</a>
             </div>
         {% endif %}
     </div>

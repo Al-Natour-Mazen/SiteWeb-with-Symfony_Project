@@ -124,7 +124,7 @@ class ProductController extends AbstractController
     /*          L'affichage du panier
     /***************************************************/
     #[Route('/Orders', name: 'Orders')]
-    public function OrderAction(EntityManagerInterface $em): Response
+    public function OrderDisplayAction(EntityManagerInterface $em): Response
     {
         // Récupération de l'utilisateur connecté
         /*
@@ -133,7 +133,7 @@ class ProductController extends AbstractController
 
         //on le fait en dure pour le moment
         $userRepository = $em->getRepository(User::class);
-        $client = $userRepository->findOneBy(['login' => 'simon']);
+        $client = $userRepository->findOneBy(['login' => 'maz12']);
 
         // Récupération de tous les produits dans son panier
         $produits = $client->getOrders();

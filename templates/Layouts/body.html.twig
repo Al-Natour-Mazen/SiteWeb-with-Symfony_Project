@@ -1,13 +1,12 @@
 {# Template racine (niveau 2) intermediaire #}
 {% extends "Layouts/base.html.twig" %}
 
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('css/Layouts/menu.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/Layouts/Footer.css') }}" type="text/css">
+{% endblock%}
+
 {% block body %}
-
-    {% block stylesheet %}
-        <link rel="stylesheet" href="{{ asset('css/Layouts/menu.css') }}" type="text/css">
-        <link rel="stylesheet" href="{{ asset('css/Layouts/Footer.css') }}" type="text/css">
-    {% endblock%}
-
     <div id="menu_div">
         {{ render(controller('App\\Controller\\AccueilController::menuAction')) }}
     </div>
