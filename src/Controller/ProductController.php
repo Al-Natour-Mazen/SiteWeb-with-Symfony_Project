@@ -71,7 +71,7 @@ class ProductController extends AbstractController
 
             // Récupération de l'utilisateur actuel (ici j'ai mis "simon" comme login à modifier plus tard pour pas que ça
             // soit en dur)
-            $client = $userRepository->findOneBy(['login' => 'simon']);
+            $client = $userRepository->findOneBy(['login' => 'maz12']);
 
             //on recupere l'id du produit
             $id = $request->request->get('id');
@@ -133,7 +133,7 @@ class ProductController extends AbstractController
 
         //on le fait en dure pour le moment
         $userRepository = $em->getRepository(User::class);
-        $client = $userRepository->findOneBy(['login' => 'simon']);
+        $client = $userRepository->findOneBy(['login' => 'maz12']);
 
         // Récupération de tous les produits dans son panier
         $produits = $client->getOrders();
@@ -141,6 +141,48 @@ class ProductController extends AbstractController
         // Affichage de la vue du panier
         return $this->render('Vue/Product/orderList.html.twig', ['produits' => $produits]);
     }
+
+
+    /***************************************************/
+    /*          Vidage du panier
+    /***************************************************/
+    #[Route('/EmptyOrders', name: 'EmptyOrders')]
+    public function EmptyOrdersAction(EntityManagerInterface $em): Response
+    {
+        $userRepository = $em->getRepository(User::class);
+        $orderRepository = $em->getRepository(Order::class);
+
+        // On Récurpere le Client actuellement connecte
+        // On le fait en dur pour le moment
+        $client = $userRepository->findOneBy(['login' => 'maz12']);
+        $IdClient = $client->getId();
+
+        // On cherche tout les orders liées au client
+        $orders = $orderRepository->findBy(['client' => $IdClient]);
+
+        // On vide tout les orders liés à ce client
+        foreach ($orders as $order) {
+
+            //On re recupere le produit pour le remttre dans la BD
+            $product = $order->getProduit();
+            if ($product) {
+                $product->setQuantite($product->getQuantite() + $order->getQuantite());
+            }
+
+            //On enleve l'order
+            $em->remove($order);
+        }
+
+        // On sauvegarde les changment
+        $em->flush();
+
+        $this->addFlash('info',"Votre Panier a été vider avec succès !");
+
+       return $this->redirectToRoute('product_Orders');
+    }
+
+
+
 
 
 

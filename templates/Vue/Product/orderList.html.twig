@@ -34,6 +34,7 @@
                             <td>{{ produit.produit.prixUnitaire }} €</td>
                             <td>{{ produit.quantite }}</td>
                             <td>{{ produit.produit.prixUnitaire * produit.quantite }} €</td>
+                            <td></td>
                         </tr>
                         {% set total_articles = total_articles + produit.quantite %}
                         {% set prix_total = prix_total + produit.produit.prixUnitaire * produit.quantite %}
@@ -48,7 +49,7 @@
             <div class="cart-actions">
                 <a href="{{ path('product_Listproduct') }}">Continuer mes achats</a>
                 <a href="{{ path('app_accueil') }}">Commander</a>
-                <a href="{{ path('app_accueil') }}">Vider Le Panier</a>
+                <a href="{{ path('product_EmptyOrders') }}">Vider Le Panier</a>
             </div>
         {% endif %}
     </div>

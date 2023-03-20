@@ -1,6 +1,6 @@
 /* Style pour le sélecteur de produits */
 #ProductList {
-    background: darkgray;
+    background: #93c5fd;
     margin: 20px auto;
     max-width: 800px;
     border-radius: 20px;
