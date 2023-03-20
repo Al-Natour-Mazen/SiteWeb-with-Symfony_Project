@@ -28,14 +28,16 @@
 
 .cart-table th,
 .cart-table td {
-    border: 1px solid #ccc;
+    border: 1px solid lightslategrey;
     padding: 5px;
     text-align: center;
-    background-color: white;
+    background-color: #ccc;
+    color: black;
 }
 
 .cart-table th {
-    background-color: #f2f2f2;
+    background-color: lightgray;
+    color: black;
 }
 
 .cart-table td:first-child {
