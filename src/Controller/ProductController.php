@@ -59,57 +59,62 @@ class ProductController extends AbstractController
     /***************************************************/
     /*      Gérer l'ajout au panier
     /***************************************************/
-    #[Route('/AddporductOrder/{id}', name: 'AddporductOrder')]
-    public function AddporductOrderAction(int $id,Request $request,EntityManagerInterface $em): Response
+    #[Route('', name: 'AddporductOrder')]
+    public function AddporductOrderAction(Request $request,EntityManagerInterface $em): Response
     {
-        $productRepository = $em->getRepository(Produit::class);
-        $userRepository = $em->getRepository(User::class);
-        $orderRepository = $em->getRepository(Order::class);
-
-        // Récupération de l'utilisateur actuel (ici j'ai mis "simon" comme login à modifier plus tard pour pas que ça
-        // soit en dur)
-        $client = $userRepository->findOneBy(['login' => 'simon']);
-
-        // Récupération du produit en fonction de l'ID
-        $produit = $productRepository->findOneBy(['id' => $id]);
-
-        // Si le produit n'existe pas, on redirige vers la liste des produits
-        if (!$produit) {
-            return $this->redirectToRoute('product_Listproduct');
-        }
-
         // Si le formulaire a été soumis
         if ($request->isMethod('POST')) {
-            // Récupération de la quantité commandée dans le formulaire
-            $quantite = $request->request->get('quantite');
 
-            // Vérification de la validité de la quantité commandée
-            if ($quantite <= 0 || $quantite > $produit->getQuantite()) {
-                $this->addFlash('error', 'Quantité invalide');
-            } else {
-                // Vérification si une commande pour ce produit existe déjà pour l'utilisateur actuel
-                $order = $orderRepository->findOneBy(['client' => $client, 'produit' => $produit]);
+            $productRepository = $em->getRepository(Produit::class);
+            $userRepository = $em->getRepository(User::class);
+            $orderRepository = $em->getRepository(Order::class);
 
-                // Si une commande existe déjà, on met à jour la quantité commandée
-                if ($order) {
-                    $order->setQuantite($order->getQuantite() + $quantite);
+            // Récupération de l'utilisateur actuel (ici j'ai mis "simon" comme login à modifier plus tard pour pas que ça
+            // soit en dur)
+            $client = $userRepository->findOneBy(['login' => 'simon']);
+
+            //on recupere l'id du produit
+            $id = $request->request->get('id');
+
+            // Récupération du produit en fonction de l'ID
+            $produit = $productRepository->findOneBy(['id' => $id]);
+
+            // Si le produit n'existe pas, on redirige vers la liste des produits
+            if (!$produit) {
+                return $this->redirectToRoute('product_Listproduct');
+            }
+            else{
+                // Récupération de la quantité commandée dans le formulaire
+                $quantite = $request->request->get('quantite');
+
+                // Vérification de la validité de la quantité commandée
+                if ($quantite <= 0 || $quantite > $produit->getQuantite()) {
+                    $this->addFlash('error', 'Quantité invalide');
                 } else {
-                    // Sinon, on crée une nouvelle commande
-                    $order = new Order();
-                    $order->setClient($client);
-                    $order->setProduit($produit);
-                    $order->setQuantite($quantite);
-                    $em->persist($order);
+                    // Vérification si une commande pour ce produit existe déjà pour l'utilisateur actuel
+                    $order = $orderRepository->findOneBy(['client' => $client, 'produit' => $produit]);
+
+                    // Si une commande existe déjà, on met à jour la quantité commandée
+                    if ($order) {
+                        $order->setQuantite($order->getQuantite() + $quantite);
+                    } else {
+                        // Sinon, on crée une nouvelle commande
+                        $order = new Order();
+                        $order->setClient($client);
+                        $order->setProduit($produit);
+                        $order->setQuantite($quantite);
+                        $em->persist($order);
+                    }
+
+                    // Mise à jour de la quantité en stock du produit
+                    $produit->setQuantite($produit->getQuantite() - $quantite);
+
+                    // Enregistrement des modifications dans la base de données
+                    $em->flush();
+
+                    // Ajout d'un message de confirmation à la page
+                    $this->addFlash('info', 'Produit ajouté au Panier');
                 }
-
-                // Mise à jour de la quantité en stock du produit
-                $produit->setQuantite($produit->getQuantite() - $quantite);
-
-                // Enregistrement des modifications dans la base de données
-                $em->flush();
-
-                // Ajout d'un message de confirmation à la page
-                $this->addFlash('success', 'Produit ajouté au Panier');
             }
         }
         return $this->redirectToRoute('product_Orders');

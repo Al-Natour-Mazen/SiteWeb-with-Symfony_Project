@@ -21,10 +21,11 @@
                         <p>Desricption : {{ produit.description }}</p>
                     {% endif %}
                     {% if produit.quantite > 0 %}
-                        <form method="POST" action=" {{ path('product_AddporductOrder',{'id': produit.id}) }}">
+                        <form method="POST" action=" {{ path('product_AddporductOrder') }}">
                                 <label for="quantite">Quantité :</label>
                                 <input type="number" id="quantite" name="quantite" min="1" max="{{ produit.quantite }}" value="1">
-                                <button id="BtnModifier" type="submit">Modifier</button>
+                                <input type="hidden" name="id" value="{{ produit.id }}">
+                                <button id="BtnModifier" type="submit">Ajouter Au Panier</button>
                         </form>
                     {% endif %}
             </div>
@@ -56,26 +57,31 @@
         });
     </script>
 
-    {# événement de submit du formulaire qui récupère la valeur du champ de quantité et met à jour
-      l'URL d'action du formulaire avec cette quantité #}
-    <script>
-        {% for produit in produits %}
-        const formModifierProduit{{ produit.id }} = document.querySelector('#form-modifier-produit-{{ produit.id }}');
-        formModifierProduit{{ produit.id }}.addEventListener('submit', (event) => {
-            const quantiteInput = document.querySelector('#form-modifier-produit-{{ produit.id }} #quantite');
-            const quantite = quantiteInput.value;
-            const actionUrl = formModifierProduit{{ produit.id }}.getAttribute('action') + '?quantite=' + quantite;
-            formModifierProduit{{ produit.id }}.setAttribute('action', actionUrl);
-        });
-        {% endfor %}
-    </script>
+
 
 
 
 {% endblock %}
 {# {{ path('produit_modifier', {'id': produit.id}) }} #}
 
+
+
+{# événement de submit du formulaire qui récupère la valeur du champ de quantité et met à jour
+l'URL d'action du formulaire avec cette quantité #}
 {#
+
+
+<script>
+    {% for produit in produits %}
+    const formModifierProduit{{ produit.id }} = document.querySelector('#form-modifier-produit-{{ produit.id }}');
+    formModifierProduit{{ produit.id }}.addEventListener('submit', (event) => {
+        const quantiteInput = document.querySelector('#form-modifier-produit-{{ produit.id }} #quantite');
+        const quantite = quantiteInput.value;
+        const actionUrl = formModifierProduit{{ produit.id }}.getAttribute('action') + '?quantite=' + quantite;
+        formModifierProduit{{ produit.id }}.setAttribute('action', actionUrl);
+    });
+    {% endfor %}
+</script>
 <div id="PorductList">
         <form method="POST" action="">
             <table>
