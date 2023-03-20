@@ -13,7 +13,7 @@
     <div class="cart-container">
         <h2>Mon Panier</h2>
         {% if produits is empty%}
-            <p class="EmptyOrder">Votre panier est vide. Venez <a href="{{ path('product_Listproduct') }}">ici</a> pour commander 😉</p>
+            <p class="EmptyOrder">Votre panier est vide. Allez <a href="{{ path('product_Listproduct') }}">ici</a> pour commander 😉</p>
         {% else %}
             <table class="cart-table">
                 <thead>
@@ -34,10 +34,7 @@
                             <td>{{ produit.produit.prixUnitaire }} €</td>
                             <td>{{ produit.quantite }}</td>
                             <td>{{ produit.produit.prixUnitaire * produit.quantite }} €</td>
-                            <td> <a href="{{ path('order_EmptyOrderProduct', {'id': produit.produit.id }) }}"><img src="{{ asset('images/Logo/Supp_icon.png') }}" width="30px" height="30px"></a></td>
-                        </tr>
-                        <tr>
-                            <a class="cart-actions" href="">Supprimer</a>
+                            <td> <a href="{{ path('order_removeProductFromCart', {'productId': produit.produit.id }) }}"><img src="{{ asset('images/Logo/Supp_icon.png') }}" width="25px" height="25px" title="Supprimer Ce Produit Du Panier"></a></td>
                         </tr>
                         {% set total_articles = total_articles + produit.quantite %}
                         {% set prix_total = prix_total + produit.produit.prixUnitaire * produit.quantite %}
@@ -52,7 +49,7 @@
             <div class="cart-actions">
                 <a href="{{ path('product_Listproduct') }}">Continuer mes achats</a>
                 <a href="{{ path('app_accueil') }}">Commander</a>
-                <a href="{{ path('order_EmptyOrders') }}">Vider Le Panier</a>
+                <a href="{{ path('order_clearCart') }}">Vider Le Panier</a>
             </div>
         {% endif %}
     </div>

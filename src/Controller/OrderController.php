@@ -19,8 +19,8 @@ class OrderController extends AbstractController
     /***************************************************/
     /*      Gérer l'ajout au panier
     /***************************************************/
-    #[Route('', name: 'AddPorduct')]
-    public function AddPorductAction(Request $request,EntityManagerInterface $em): Response
+    #[Route('', name: 'addPorduct')]
+    public function addPorductAction(Request $request,EntityManagerInterface $em): Response
     {
         // Si le formulaire a été soumis
         if ($request->isMethod('POST')) {
@@ -73,18 +73,18 @@ class OrderController extends AbstractController
                     $em->flush();
 
                     // Ajout d'un message de confirmation à la page
-                    $this->addFlash('info', 'Produit ajouté au Panier');
+                    $this->addFlash('info', 'Produit ajouté au Panier avec succès !');
                 }
             }
         }
-        return $this->redirectToRoute('order_ClientOrders');
+        return $this->redirectToRoute('order_ClientCart');
     }
 
     /***************************************************/
     /*          L'affichage du panier
     /***************************************************/
-    #[Route('/ClientOrders', name: 'ClientOrders')]
-    public function OrderDisplayAction(EntityManagerInterface $em): Response
+    #[Route('/ClientCart', name: 'ClientCart')]
+    public function ClientCartAction(EntityManagerInterface $em): Response
     {
         // Récupération de l'utilisateur connecté
         /*
@@ -105,10 +105,10 @@ class OrderController extends AbstractController
 
 
     /***************************************************/
-    /*          Vidage du panier
+    /*          Vider completement le panier
     /***************************************************/
-    #[Route('/EmptyOrders', name: 'EmptyOrders')]
-    public function EmptyOrdersAction(EntityManagerInterface $em): Response
+    #[Route('/clearCart', name: 'clearCart')]
+    public function clearCartAction(EntityManagerInterface $em): Response
     {
 
         $userRepository = $em->getRepository(User::class);
@@ -140,48 +140,53 @@ class OrderController extends AbstractController
 
         $this->addFlash('info',"Votre Panier a été vider avec succès !");
 
-        return $this->redirectToRoute('order_ClientOrders');
+        return $this->redirectToRoute('order_ClientCart');
     }
 
     /***************************************************/
     /*        Suppresion d'un seul Produit du Panier
     /***************************************************/
-    #[Route('/EmptyOrderProduct/{id}', name: 'EmptyOrderProduct')]
-    public function EmptyOrderProductAction(int $id,EntityManagerInterface $em): Response
+    #[Route('/removeProductFromCart/{productId}', name: 'removeProductFromCart')]
+    public function removeProductFromCartAction(int $productId, EntityManagerInterface $em): Response
     {
         $userRepository = $em->getRepository(User::class);
         $orderRepository = $em->getRepository(Order::class);
+        $productRepository = $em->getRepository(Produit::class);
 
         // On Récurpere le Client actuellement connecte
         // On le fait en dur pour le moment
         $client = $userRepository->findOneBy(['login' => 'maz12']);
-        $IdClient = $client->getId();
 
-        // On cherche tout les orders liées au client
-        $orders = $orderRepository->findBy(['client' => $IdClient]);
+        // on cherche le produit à enlever pour verifier si ce produit existe
+        $product = $productRepository->find($productId);
 
-        // On vide tout les orders liés à ce client
-        foreach ($orders as $order) {
+        if ($product) {
+            // on cherche l'order precis pour ce client et ce produit
+            $order = $orderRepository->findOneBy(['client' => $client, 'produit' => $product]);
 
-            //On re recupere le produit pour le remttre dans la BD
-            $product = $order->getProduit();
-            if ($product) {
-                $product->setQuantite($product->getQuantite() + $order->getQuantite());
+            if ($order) {
+                // on MAJ la quantite dans la BD
+                if ($product) {
+                    $product->setQuantite($product->getQuantite() + $order->getQuantite());
+                }
+
+                // On enleve l'order
+                $em->remove($order);
+
+                // On enregistre les modifs dans la BD
+                $em->flush();
+
+                // On ajoute un msg flash pour informé
+                $this->addFlash('info', "Le produit a été retiré de votre panier avec succès !");
+            } else {
+                // On ajoute un msg flash pour informé
+                $this->addFlash('error', "Le produit n'a pas été trouvé dans votre panier.");
             }
-
-            //On enleve l'order
-            $em->remove($order);
+        } else {
+            // On ajoute un msg flash pour informé
+            $this->addFlash('error', "Le produit spécifié n'existe pas.");
         }
 
-        // On sauvegarde les changment
-        $em->flush();
-
-        $this->addFlash('info',"Votre Panier a été vider avec succès !");
-
-        return $this->redirectToRoute('product_Orders');
+        return $this->redirectToRoute('order_ClientCart');
     }
-
-
-
-
 }

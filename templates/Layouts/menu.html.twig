@@ -19,7 +19,7 @@
                     {% if isClient == true %}
                         <li> <a href="{{ path('app_accueil') }}">Accueil </a></li>
                         <li> <a href="{{ path('product_Listproduct') }}">Liste Des produits</a></li>
-                        <li> <a href="{{ path('order_ClientOrders') }}">Mon panier ({{ nbproduit }}-produit(s))</a></li>
+                        <li> <a href="{{ path('order_ClientCart') }}">Mon panier ({{ nbproduit }}-produit(s))</a></li>
                         <li> <a href="{{ path('account_editProfile') }}">Gérer le profil</a></li>
                     {% endif %}
 
