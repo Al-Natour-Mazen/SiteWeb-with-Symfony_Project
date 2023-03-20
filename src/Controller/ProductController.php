@@ -2,11 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Order;
 use App\Entity\Produit;
-use App\Entity\User;
 use App\Form\ProductType;
-use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -55,13 +52,6 @@ class ProductController extends AbstractController
         $products = $productsrepository->findAll();
         return $this->render("Vue/Product/productList.html.twig", ['produits' => $products]);
     }
-
-
-
-
-
-
-
 
 }
 

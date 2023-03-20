@@ -121,23 +121,28 @@ class OrderController extends AbstractController
         // On cherche tout les orders liées au client
         $orders = $orderRepository->findBy(['client' => $IdClient]);
 
-        // On vide tout les orders liés à ce client
-        foreach ($orders as $order) {
+        if($orders){
+            // On vide tout les orders liés à ce client
+            foreach ($orders as $order) {
 
-            //On re recupere le produit pour le remttre dans la BD
-            $product = $order->getProduit();
-            if ($product) {
-                $product->setQuantite($product->getQuantite() + $order->getQuantite());
+                //On re recupere le produit pour le remttre dans la BD
+                $product = $order->getProduit();
+                if ($product) {
+                    $product->setQuantite($product->getQuantite() + $order->getQuantite());
+                }
+
+                //On enleve l'order
+                $em->remove($order);
             }
 
-            //On enleve l'order
-            $em->remove($order);
+            // On sauvegarde les changment
+            $em->flush();
+
+            $this->addFlash('info',"Votre Panier a été vider avec succès !");
+        }else{
+            $this->addFlash('info',"Votre Panier n'a pas été vider, Un probléme est survenue !");
         }
 
-        // On sauvegarde les changment
-        $em->flush();
-
-        $this->addFlash('info',"Votre Panier a été vider avec succès !");
 
         return $this->redirectToRoute('order_ClientCart');
     }
@@ -190,7 +195,6 @@ class OrderController extends AbstractController
     }
 
 
-
     /***************************************************/
     /*        Commander les produits
     /***************************************************/
@@ -202,7 +206,7 @@ class OrderController extends AbstractController
 
         // On récupère le client actuellement connecté
         // On le fait en dur pour le moment
-        $client = $userRepository->findOneBy(['login' => 'maz12']);
+        $client = $userRepository->findOneBy(['login' => 'simon']);
         $IdClient = $client->getId();
 
         // On cherche tous les orders liés au client
@@ -227,11 +231,4 @@ class OrderController extends AbstractController
 
         return $this->redirectToRoute('order_ClientCart');
     }
-
-
-
-
-
-
-
 }
