@@ -38,10 +38,10 @@ class AccueilController extends AbstractController
             $nbproduits = count($client->getOrders());
 
         $args = array(
-            'isAuth'=> true,
+            'isAuth'=> false,
             'isAdmin' => false,
             'isSuperAdmin' => false,
-            'isClient' => true,
+            'isClient' => false,
             'nbproduit' => $nbproduits,
         );
         return $this->render('Layouts/menu.html.twig', $args);

@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Config\Doctrine\Orm\EntityManagerConfig;
 use Symfony\Component\Form\FormTypeInterface;
@@ -48,7 +49,9 @@ class AccountController extends AbstractController
     /*                Création d'un compte
     /***************************************************/
     #[Route('/createAccount', name: 'createAccount')]
-    public function createAccountAction(EntityManagerInterface $em , Request $requete): Response
+    public function createAccountAction(EntityManagerInterface $em ,
+                                        UserPasswordHasherInterface $passwordHasher,
+                                        Request $requete): Response
     {
         // creation de la nouvelle personne
         $TheNewOne = new User();
@@ -59,6 +62,10 @@ class AccountController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
             $TheNewOne->setRoles(['ROLE_CLIENT']);
+
+            $hashedPassword = $passwordHasher->hashPassword($TheNewOne, $TheNewOne->getPassword());
+            $TheNewOne->setPassword($hashedPassword);
+
             $em->persist($TheNewOne);
             $em->flush();
             $this->addFlash('info','Votre compte Client a été créer !');
