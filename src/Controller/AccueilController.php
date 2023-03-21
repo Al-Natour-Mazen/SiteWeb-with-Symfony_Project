@@ -38,9 +38,9 @@ class AccueilController extends AbstractController
             $nbproduits = count($client->getOrders());
 
         $args = array(
-            'isAuth'=> false,
+            'isAuth'=> true,
             'isAdmin' => false,
-            'isSuperAdmin' => false,
+            'isSuperAdmin' => true,
             'isClient' => false,
             'nbproduit' => $nbproduits,
         );

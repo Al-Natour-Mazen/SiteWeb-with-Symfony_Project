@@ -90,9 +90,11 @@ class AccountController extends AbstractController
     #[Route('/editProfile',
         name: 'editProfile',
     )]
-    public function editProfileAction(EntityManagerInterface $em , Request $requete): Response
+    public function editProfileAction(EntityManagerInterface $em,
+                                      UserPasswordHasherInterface $passwordHasher,
+                                      Request $requete): Response
     {
-        $login = "simon"; // on le fait en dur pour le moment quand on aura l'auth on recupere l'utilisateur connecte
+        $login = "maz12"; // on le fait en dur pour le moment quand on aura l'auth on recupere l'utilisateur connecte
 
         $userrepository = $em->getRepository(User::class);
         $user = $userrepository->findOneBy(['login' => $login]);
@@ -105,6 +107,8 @@ class AccountController extends AbstractController
         $form->handleRequest($requete);
 
         if($form->isSubmitted() && $form->isValid()){
+            $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
+            $user->setPassword($hashedPassword);
             $em->flush();
             $this->addFlash('info','Votre compte a été modifier !');
             if($user->getRoles()[0] === "ROLE_CLIENT")

@@ -38,7 +38,12 @@ security:
         - { path: ^/$, roles: PUBLIC_ACCESS }
         - { path: ^/account/connect$, roles: PUBLIC_ACCESS }
         - { path: ^/account/createAccount$, roles: PUBLIC_ACCESS }
-        - { path: ^/, roles: IS_AUTHENTICATED_REMEMBERED }
+        - { path: ^/account/, roles: IS_AUTHENTICATED_REMEMBERED }
+        - { path: ^/product/Listproduct$, roles: ROLE_CLIENT }
+        - { path: ^/product, roles: ROLE_ADMIN }
+        - { path: ^/order, roles: [ROLE_CLIENT, ROLE_ADMIN] }
+        # - { gestion des clients, roles: ROLE_ADMIN }
+        - { path: ^/admin/createAdmin$, roles: ROLE_SUPERADMIN }
 
 when@test:
     security:
