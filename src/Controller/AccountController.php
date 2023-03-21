@@ -58,7 +58,7 @@ class AccountController extends AbstractController
         $form->handleRequest($requete);
 
         if($form->isSubmitted() && $form->isValid()){
-            $TheNewOne->setRoles(['CLIENT']);
+            $TheNewOne->setRoles(['ROLE_CLIENT']);
             $em->persist($TheNewOne);
             $em->flush();
             $this->addFlash('info','Votre compte Client a été créer !');

@@ -30,7 +30,7 @@ class OrderController extends AbstractController
 
             // Récupération de l'utilisateur actuel (ici j'ai mis "simon" comme login à modifier plus tard pour pas que ça
             // soit en dur)
-            $client = $userRepository->findOneBy(['login' => 'maz12']);
+            $client = $userRepository->findOneBy(['login' => 'simon']);
 
             //on recupere l'id du produit
             $id = $request->request->get('id');
@@ -92,7 +92,7 @@ class OrderController extends AbstractController
 
         //on le fait en dure pour le moment
         $userRepository = $em->getRepository(User::class);
-        $client = $userRepository->findOneBy(['login' => 'maz12']);
+        $client = $userRepository->findOneBy(['login' => 'simon']);
 
         // Récupération de tous les produits dans son panier
             $produits = $client->getOrders();
@@ -115,7 +115,7 @@ class OrderController extends AbstractController
 
         // On Récurpere le Client actuellement connecte
         // On le fait en dur pour le moment
-        $client = $userRepository->findOneBy(['login' => 'maz12']);
+        $client = $userRepository->findOneBy(['login' => 'simon']);
         $IdClient = $client->getId();
 
         // On cherche tout les orders liées au client
@@ -159,7 +159,7 @@ class OrderController extends AbstractController
 
         // On Récurpere le Client actuellement connecte
         // On le fait en dur pour le moment
-        $client = $userRepository->findOneBy(['login' => 'maz12']);
+        $client = $userRepository->findOneBy(['login' => 'simon']);
 
         // on cherche le produit à enlever pour verifier si ce produit existe
         $product = $productRepository->find($productId);
