@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Order;
 use App\Entity\Produit;
 use App\Form\ProductType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -50,10 +51,21 @@ class ProductController extends AbstractController
     #[IsGranted('ROLE_CLIENT')]
     public function productListAction(EntityManagerInterface $em): Response
     {
+        //on recupere le client déjà connecte
+        $client = $this->getUser();
+        $orders = $client->getOrders();
+
+
         //On recupére tout les produits de la BD et on les envoie à la vue
         $productsrepository = $em->getRepository(Produit::class);
         $products = $productsrepository->findAll();
-        return $this->render("Vue/Product/productList.html.twig", ['produits' => $products]);
+        return $this->render("Vue/Product/productList.html.twig", ['produits' => $products, 'panier' => $orders]);
+    }
+
+
+    private function GetQauntiteDejaCommandeeAction(int $id) : int
+    {
+        return 0;
     }
 
 }

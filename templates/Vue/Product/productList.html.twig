@@ -22,9 +22,19 @@
                         <p> {{ produit.description }}</p>
                     {% endif %}
                     {% if produit.quantite > 0 %}
+                        {% set quantite_deja_commande = 0 %}
+                        {% for item in panier %}
+                            {% if item.produit.id == produit.id %}
+                                {% set quantite_deja_commande = item.quantite %}
+                            {% endif %}
+                        {% endfor %}
                         <form method="POST" action=" {{ path('order_addPorduct') }}">
                                 <label for="quantite">Quantité :</label>
-                                <input type="number" id="quantite" name="quantite" min="1" max="{{ produit.quantite }}" value="1">
+                                <select id="quantite" name="quantite">
+                                    {% for i in range(- quantite_deja_commande, produit.quantite - quantite_deja_commande + 1) %}
+                                        <option value="{{ i }}" {% if i == 1 %}selected{% endif %}>{{ i }}</option>
+                                    {% endfor %}
+                                </select>
                                 <input type="hidden" name="id" value="{{ produit.id }}">
                                 <button id="BtnModifier" type="submit">Ajouter Au Panier</button>
                         </form>
@@ -71,7 +81,8 @@
 {# {{ path('produit_modifier', {'id': produit.id}) }} #}
 
 
-
+{#                                 <input type="number" id="quantite" name="quantite" min="-{{ quantite_deja_commande}}" max="{{ produit.quantite }}" value="1">
+#}
 {# événement de submit du formulaire qui récupère la valeur du champ de quantité et met à jour
 l'URL d'action du formulaire avec cette quantité #}
 {#
