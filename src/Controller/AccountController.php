@@ -93,12 +93,6 @@ class AccountController extends AbstractController
                                       Request $requete): Response
     {
         $user = $this->getUser();
-        // $login = "maz12"; // on le fait en dur pour le moment quand on aura l'auth on recupere l'utilisateur connecte
-        //$userrepository = $em->getRepository(User::class);
-        //$user = $userrepository->findOneBy(['login' => $login]);
-
-        // if(is_null($user))
-            // throw new NotFoundHttpException('Ce Client avec ce Login : ' . $login . ' n\'existe pas');
 
         $form = $this->createForm(UserType::class,$user);
         $form->add('modify',SubmitType::class,['label' => 'modifier votre profile']);
