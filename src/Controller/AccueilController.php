@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/', name: 'app')]
@@ -25,23 +27,34 @@ class AccueilController extends AbstractController
     /***************************************************/
     public function menuAction(EntityManagerInterface $em): Response
     {
+        $user = $this->getUser();
 
-        // $client = $this->getUser();
-
-        //on le fait en dure pour le moment
-        $userRepository = $em->getRepository(User::class);
-        $client = $userRepository->findOneBy(['login' => 'simon']);
+        $isAuth = false;
+        $isAdmin = false;
+        $isSuperAdmin = false;
+        $isClient = false;
 
         $nbproduits = 0;
         // On compte tous les produits dans son panier
-        if($client)
-            $nbproduits = count($client->getOrders());
+        if($user !== null) {
+            $nbproduits = count($user->getOrders());
+            $isAuth = true;
+            if ($this->isGranted('ROLE_SUPERADMIN'))
+                $isSuperAdmin = true;
+            if ($this->isGranted('ROLE_ADMIN'))
+                $isAdmin = true;
+            if ($this->isGranted('ROLE_CLIENT'))
+                $isClient = true;
+        }
+
+
+
 
         $args = array(
-            'isAuth'=> true,
-            'isAdmin' => false,
-            'isSuperAdmin' => true,
-            'isClient' => false,
+            'isAuth'=> $isAuth,
+            'isAdmin' => $isAdmin,
+            'isSuperAdmin' => $isSuperAdmin,
+            'isClient' => $isClient,
             'nbproduit' => $nbproduits,
         );
         return $this->render('Layouts/menu.html.twig', $args);
