@@ -54,8 +54,8 @@ class OrderController extends AbstractController
             if ($quantite < $quantiteDejaCommande * -1 || $quantite > $produit->getQuantite()) {
                 $this->addFlash('info', 'Quantité invalide');
             }if ($quantite == 0) {
-                $this->addFlash('info' , 'Vous ne pouvez pas ajouter une quantite egale a zero');
                 // Si la quantité est nulle, on ne fait rien
+                $this->addFlash('info' , 'Vous ne pouvez pas ajouter une quantite egale a zero');
                 return $this->redirectToRoute('product_Listproduct');
             } else {
                 // Si une commande existe déjà, on met à jour la quantité commandée
