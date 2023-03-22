@@ -22,34 +22,29 @@ class AccountController extends AbstractController
     /***************************************************/
     /*                Connexion d'un compte
     /***************************************************/
-    /*
     #[Route('/connect', name: 'connect')]
-    public function connectAction(Request $req): Response
+    public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        if($req->request->count() > 0){
-            // si on est là ça veut dire que l'utilisateur essaye de se co donc on va verifier s'il est dans la BD
-
-
-            //si oui alors on le redirige vers l'accueil
+        if ($this->getUser()) {
             return $this->redirectToRoute('app_accueil');
-
         }
 
-        return $this->render("Vue/Account/connect.html.twig");
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render('Vue/Account/connect.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
-    */
     /***************************************************/
     /*                Déconnexion d'un compte
     /***************************************************/
-
-    /*
-    #[Route('/disconnect', name: 'disconnect')]
-    public function disconnectAction(): Response
+    #[Route(path: '/disconnect', name: 'disconnect')]
+    public function logout(): void
     {
-        $this->addFlash('info', 'Vous pourrez vous déconnecter ultérieurement');
-        return $this->redirectToRoute('app_accueil');
+        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
-    */
+
     /***************************************************/
     /*                Création d'un compte
     /***************************************************/
@@ -58,6 +53,9 @@ class AccountController extends AbstractController
                                         UserPasswordHasherInterface $passwordHasher,
                                         Request $requete): Response
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_accueil');
+        }
         // creation de la nouvelle personne
         $TheNewOne = new User();
 
@@ -94,13 +92,13 @@ class AccountController extends AbstractController
                                       UserPasswordHasherInterface $passwordHasher,
                                       Request $requete): Response
     {
-        $login = "maz12"; // on le fait en dur pour le moment quand on aura l'auth on recupere l'utilisateur connecte
+        $user = $this->getUser();
+        // $login = "maz12"; // on le fait en dur pour le moment quand on aura l'auth on recupere l'utilisateur connecte
+        //$userrepository = $em->getRepository(User::class);
+        //$user = $userrepository->findOneBy(['login' => $login]);
 
-        $userrepository = $em->getRepository(User::class);
-        $user = $userrepository->findOneBy(['login' => $login]);
-
-        if(is_null($user))
-            throw new NotFoundHttpException('Ce Client avec ce Login : ' . $login . ' n\'existe pas');
+        // if(is_null($user))
+            // throw new NotFoundHttpException('Ce Client avec ce Login : ' . $login . ' n\'existe pas');
 
         $form = $this->createForm(UserType::class,$user);
         $form->add('modify',SubmitType::class,['label' => 'modifier votre profile']);
@@ -123,27 +121,4 @@ class AccountController extends AbstractController
 
         return $this->render('Vue/Account/editProfile.html.twig',$args);
     }
-
-    #[Route('/connect', name: 'connect')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
-
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
-
-        return $this->render('Vue/Account/connect.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
-        // return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
-    }
-
-    #[Route(path: '/disconnect', name: 'disconnect')]
-    public function logout(): void
-    {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
-    }
-
 }
