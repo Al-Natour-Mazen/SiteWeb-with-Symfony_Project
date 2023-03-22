@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/product', name: 'product_')]
 class ProductController extends AbstractController
@@ -18,6 +19,7 @@ class ProductController extends AbstractController
     /*       Creer Un Produit que par un Admin
     /***************************************************/
     #[Route('/Createproduct', name: 'Createproduct')]
+    #[IsGranted('ROLE_ADMIN')]
     public function CreateproductAction(EntityManagerInterface $em , Request $requete): Response
     {
         // creation de du nouveau Produit
@@ -45,6 +47,7 @@ class ProductController extends AbstractController
     /*       Afficher les Listes Des Produits Dispo
     /***************************************************/
     #[Route('/Listproduct', name: 'Listproduct')]
+    #[IsGranted('ROLE_CLIENT')]
     public function productListAction(EntityManagerInterface $em): Response
     {
         //On recupére tout les produits de la BD et on les envoie à la vue

@@ -10,9 +10,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 #[Route('/order', name: 'order_')]
+#[IsGranted('ROLE_CLIENT')]
 class OrderController extends AbstractController
 {
     /***************************************************/
@@ -25,12 +27,11 @@ class OrderController extends AbstractController
         if ($request->isMethod('POST')) {
 
             $productRepository = $em->getRepository(Produit::class);
-            $userRepository = $em->getRepository(User::class);
             $orderRepository = $em->getRepository(Order::class);
 
             // Récupération de l'utilisateur actuel (ici j'ai mis "simon" comme login à modifier plus tard pour pas que ça
             // soit en dur)
-            $client = $userRepository->findOneBy(['login' => 'simon']);
+            $client = $this->getUser();
 
             //on recupere l'id du produit
             $id = $request->request->get('id');
@@ -85,14 +86,7 @@ class OrderController extends AbstractController
     #[Route('/ClientCart', name: 'ClientCart')]
     public function ClientCartAction(EntityManagerInterface $em): Response
     {
-        // Récupération de l'utilisateur connecté
-        /*
-        /** @var User $client */
-        // $client = $this->getUser();
-
-        //on le fait en dure pour le moment
-        $userRepository = $em->getRepository(User::class);
-        $client = $userRepository->findOneBy(['login' => 'simon']);
+        $client = $this->getUser();
 
         // Récupération de tous les produits dans son panier
             $produits = $client->getOrders();
@@ -109,17 +103,13 @@ class OrderController extends AbstractController
     #[Route('/clearCart', name: 'clearCart')]
     public function clearCartAction(EntityManagerInterface $em): Response
     {
-
-        $userRepository = $em->getRepository(User::class);
         $orderRepository = $em->getRepository(Order::class);
 
         // On Récurpere le Client actuellement connecte
-        // On le fait en dur pour le moment
-        $client = $userRepository->findOneBy(['login' => 'simon']);
-        $IdClient = $client->getId();
+        $client = $this->getUser();
 
         // On cherche tout les orders liées au client
-        $orders = $orderRepository->findBy(['client' => $IdClient]);
+        $orders = $orderRepository->findBy(['client' => $client]);
 
         if($orders){
             // On vide tout les orders liés à ce client
@@ -153,13 +143,12 @@ class OrderController extends AbstractController
     #[Route('/removeProductFromCart/{productId}', name: 'removeProductFromCart')]
     public function removeProductFromCartAction(int $productId, EntityManagerInterface $em): Response
     {
-        $userRepository = $em->getRepository(User::class);
         $orderRepository = $em->getRepository(Order::class);
         $productRepository = $em->getRepository(Produit::class);
 
         // On Récurpere le Client actuellement connecte
         // On le fait en dur pour le moment
-        $client = $userRepository->findOneBy(['login' => 'simon']);
+        $client = $this->getUser();
 
         // on cherche le produit à enlever pour verifier si ce produit existe
         $product = $productRepository->find($productId);
@@ -201,16 +190,14 @@ class OrderController extends AbstractController
     #[Route('/placeOrder', name: 'placeOrder')]
     public function placeOrderAction(EntityManagerInterface $em): Response
     {
-        $userRepository = $em->getRepository(User::class);
         $orderRepository = $em->getRepository(Order::class);
 
         // On récupère le client actuellement connecté
         // On le fait en dur pour le moment
-        $client = $userRepository->findOneBy(['login' => 'simon']);
-        $IdClient = $client->getId();
+        $client = $this->getUser();
 
         // On cherche tous les orders liés au client
-        $orders = $orderRepository->findBy(['client' => $IdClient]);
+        $orders = $orderRepository->findBy(['client' => $client]);
 
         if($orders){
             // On vide tous les orders liés à ce client
