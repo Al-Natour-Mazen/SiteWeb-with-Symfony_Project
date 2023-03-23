@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Service\CheckPassword;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -51,7 +52,9 @@ class AccountController extends AbstractController
     #[Route('/createAccount', name: 'createAccount')]
     public function createAccountAction(EntityManagerInterface $em ,
                                         UserPasswordHasherInterface $passwordHasher,
-                                        Request $requete): Response
+                                        Request $requete,
+                                        CheckPassword $checkPassword
+    ): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_accueil');
@@ -66,13 +69,19 @@ class AccountController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             $TheNewOne->setRoles(['ROLE_CLIENT']);
 
-            $hashedPassword = $passwordHasher->hashPassword($TheNewOne, $TheNewOne->getPassword());
-            $TheNewOne->setPassword($hashedPassword);
+            if (!$checkPassword->check($TheNewOne->getPassword())) {
+                $this->addFlash('info','Votre mot de passe n\'est pas valide (service)');
+                return $this->redirectToRoute('account_createAccount');
+            }
+            else {
+                $hashedPassword = $passwordHasher->hashPassword($TheNewOne, $TheNewOne->getPassword());
+                $TheNewOne->setPassword($hashedPassword);
 
-            $em->persist($TheNewOne);
-            $em->flush();
-            $this->addFlash('info','Votre compte Client a été créer !');
-            return $this->redirectToRoute('app_accueil');
+                $em->persist($TheNewOne);
+                $em->flush();
+                $this->addFlash('info', 'Votre compte Client a été créer !');
+                return $this->redirectToRoute('app_accueil');
+            }
         }
 
         $args=array(
