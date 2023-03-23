@@ -1,28 +1,24 @@
 {% block menu %} {# {{ path('') }}  {{ asset('') }}#}
     <nav class="menu">
         <ul class="main-menu">
+            <li> <a href="{{ path('app_accueil') }}">Accueil </a></li>
                 {% if isAuth == false %}
-                    <li> <a href="{{ path('app_accueil') }}">Accueil </a></li>
                     <li><a href="{{ path('account_connect') }}">Connexion</a></li>
                     <li><a href="{{ path('account_createAccount') }}">Créer un compte</a></li>
                 {% else %}
                     {%if isSuperAdmin == true %}
-                        <li> <a href="{{ path('app_accueil') }}">Accueil </a></li>
-                        <li> <a href="{{ path('account_editProfile') }}">Gérer Mon profil</a></li>
                         <li> <a href="{{ path('admin_createAdmin') }}">Créer un admin</a></li>
+                    {% endif %}
+                    {% if isClient == true %}
+                        <li> <a href="{{ path('product_Listproduct') }}">Liste Des produits</a></li>
+                        <li> <a href="{{ path('order_ClientCart') }}">Mon panier <img src="{{ asset('images/Logo/Panier.png') }}" alt="Nombre de Produits" width="26px" height="25px" title="Nombre de Produits"> {{ nbproduit }}</a></li>
                     {% endif %}
                     {% if isAdmin == true %}
                         <li><a href="">Gérer les clients</a></li>
                         <li> <a href="{{ path('product_Createproduct') }}">Créer un produit</a></li>
                         <li> <a href="https://fr.wikipedia.org/wiki/The Truman Show" target="_blank" >The Truman Show</a></li>
                     {% endif %}
-                    {% if isClient == true %}
-                        <li> <a href="{{ path('app_accueil') }}">Accueil </a></li>
-                        <li> <a href="{{ path('product_Listproduct') }}">Liste Des produits</a></li>
-                        <li> <a href="{{ path('order_ClientCart') }}">Mon panier ({{ nbproduit }}-produit(s))</a></li>
-                        <li> <a href="{{ path('account_editProfile') }}">Gérer le profil</a></li>
-                    {% endif %}
-
+                    <li> <a href="{{ path('account_editProfile') }}">Gérer Mon profil</a></li>
                     <li><a href="{{ path('account_disconnect') }}">Déconnexion</a></li>
                 {% endif %}
                 {% if isAuth == false %}
