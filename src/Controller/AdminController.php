@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Order;
 use App\Entity\User;
 use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -65,8 +66,64 @@ class AdminController extends AbstractController
         return $this->render('Vue/Admin/manageCustomers.html.twig',['clients'=> $users]);
     }
 
+    #[Route('/clearCartbyAdmin/{clientid}',
+        name: 'clearCartbyAdmin',
+        requirements: ['clientid' => '[1-9]\d*']
+    )]
+    public function clearCartAction(int $clientid,EntityManagerInterface $em): Response
+    {
+        $userRepository = $em->getRepository(User::class);
+        $user = $userRepository->findOneBy(['id' => $clientid]);
+
+        if($user !== null){
+                if(in_array("ROLE_SUPERADMIN", $user->getRoles())){
+                    $this->addFlash('info' , 'vous ne pouvez pas gérer un SuperAdmin !');
+                }
+                else {
+                    $orderRepository = $em->getRepository(Order::class);
+                    // On cherche tout les orders liées au client
+                    $orders = $orderRepository->findBy(['client' => $user]);
+                    dump($user->getRoles()[0]);
+                    if ($orders) {
+                        // On vide tout les orders liés à ce client
+                        foreach ($orders as $order) {
+
+                            //On re recupere le produit pour le remttre dans la BD
+                            $product = $order->getProduit();
+                            if ($product) {
+                                $product->setQuantite($product->getQuantite() + $order->getQuantite());
+                            }
+
+                            //On enleve l'order
+                            $em->remove($order);
+                        }
+
+                        // On sauvegarde les changment
+                        $em->flush();
+
+                        $this->addFlash('info', "Le Panier a été vider avec succès !");
+                    } else {
+                        $this->addFlash('info', "Cette utilisateur n a pas de panier en cours !");
+                    }
+                }
+        }
+        else{
+            $this->addFlash('info' , 'Cette utilisateurs n existe pas !');
+        }
+
+        return $this->redirectToRoute('admin_managecustomers');
+    }
 
 
 
+
+
+
+/*   if($user->getRoles()[0] === ['ROLE_SUPERADMIN']){
+                $this->addFlash('info' , 'vous ne puvez pas supprimer un SuperAdmin !');
+            }
+            else{
+
+            }*/
 
 }

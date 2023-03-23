@@ -61,13 +61,6 @@ class ProductController extends AbstractController
         $products = $productsrepository->findAll();
         return $this->render("Vue/Product/productList.html.twig", ['produits' => $products, 'panier' => $orders]);
     }
-
-
-    private function GetQauntiteDejaCommandeeAction(int $id) : int
-    {
-        return 0;
-    }
-
 }
 
 

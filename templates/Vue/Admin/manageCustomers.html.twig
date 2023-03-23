@@ -20,7 +20,7 @@
                     <th>Nom Prénom</th>
                     <th>Date de naissance</th>
                     <th>Status</th>
-                    <th>Action</th>
+                    <th colspan="2">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -37,59 +37,24 @@
                                 {% endif %}
                             {% endfor %}
                         </td>
-                        <td>
-                            {% for role in client.roles %}
-                                {% if role != 'ROLE_NOROLE' %}
-                                    {% if role != 'ROLE_SUPERADMIN' %}
-                                        <button type="submit">Supprimer</button>
-                                    {% endif %}
-                                {% endif %}
-
-                            {% endfor %}
-                        </td>
+                        {% for role in client.roles %}
+                            {% if role != 'ROLE_NOROLE' and role != 'ROLE_SUPERADMIN' %}
+                                <td>
+                                    <a href="">
+                                        <img src="{{ asset('images/Logo/SuppUser.png') }}" width="30px" height="30px" title="Supprimer Cette Utilisateur" alt="">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{{ path('admin_clearCartbyAdmin', {'clientid': client.id }) }}">
+                                        <img src="{{ asset('images/Logo/ClearCart.png') }}" width="30px" height="30px" title="Vider Son Panier" alt="">
+                                    </a>
+                                </td>
+                            {% endif %}
+                        {% endfor %}
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
     </div>
-
-    <style>
-        #CustomersList {
-            background: #93c5fd;
-            margin: 20px auto;
-            max-width: 1100px;
-            border-radius: 20px;
-            color: black;
-            padding: 20px;
-        }
-
-        h2 {
-            font-size: 24px;
-            margin: 0 0 10px;
-            color : #142d4c;
-            text-decoration-line: underline;
-            font-weight: bold;
-        }
-
-        .client-table {
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-
-        .client-table th,
-        .client-table td {
-            border: 1px solid lightslategrey;
-            padding: 5px;
-            text-align: center;
-            background-color: #ccc;
-            color: black;
-        }
-
-        .client-table th {
-            background-color: lightgray;
-            color: black;
-        }
-    </style>
 {% endblock %}
 
