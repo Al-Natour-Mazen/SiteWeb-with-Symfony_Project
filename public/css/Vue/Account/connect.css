@@ -16,6 +16,15 @@
     text-align: center;
 }
 
+.alert{
+    background-color: #B0413E;
+    border-color: #f5c6cb;
+    color: #cccccc;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    text-decoration-line: underline;
+}
 
 .title {
     font-weight: bold;

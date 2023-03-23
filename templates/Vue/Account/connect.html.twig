@@ -13,25 +13,26 @@
 {% block vue %}
     <div class="form-box">
         <form action="" class="form" method="post">
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
-
             {% if app.user %}
                 <div class="mb-3">
                     You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('account_disconnect') }}">Logout</a>
                 </div>
             {% endif %}
-
             <span class="title">Connexion</span>
-            <label for="inputLogin">Login</label>
-            <input type="text" value="{{ last_username }}" name="login" id="inputLogin" class="form-control" autocomplete="username" required autofocus>
-            <label for="inputPassword">Password</label>
-            <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+            <div class="form-container">
+                <label for="inputLogin"></label>
+                <input type="text" value="{{ last_username }}" name="login" id="inputLogin" class="input" autocomplete="username" required autofocus placeholder="Nom d'utilisateur">
+                <label for="inputPassword"></label>
+                <input type="password" name="password" id="inputPassword" class="input" autocomplete="current-password" required placeholder="Mot de Passe">
+            </div>
 
             <input type="hidden" name="_csrf_token"
                    value="{{ csrf_token('authenticate') }}"
             >
+
+            {% if error %}
+                <div class="alert alert-danger"> /!\ Erreur : {{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
 
             {#
             Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
@@ -45,9 +46,12 @@
             #}
 
             <button class="btn btn-lg btn-primary" type="submit">
-                Sign in
+                Se connecter
             </button>
         </form>
+        <div class="form-section">
+            <p>Vous n'avez pas de compte ? <a href="{{ path('account_createAccount') }}">Créer en un :)</a> </p>
+        </div>
     </div>
 {% endblock %}
 
