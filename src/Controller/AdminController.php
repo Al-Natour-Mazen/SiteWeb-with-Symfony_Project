@@ -67,8 +67,8 @@ class AdminController extends AbstractController
     /***************************************************/
     /* Action pour vider le panier d'un utilisateur par un admin
     /***************************************************/
-    #[Route('/clearCartbyAdmin/{clientid}',
-        name: 'clearCartbyAdmin',
+    #[Route('/clearcartbyadmin/{clientid}',
+        name: 'clearcartbyadmin',
         requirements: ['clientid' => '[1-9]\d*']
     )]
     #[IsGranted('ROLE_ADMIN')]

@@ -222,7 +222,10 @@ class OrderController extends AbstractController
     /***************************************************/
     /*        Suppresion d'un seul Produit du Panier
     /***************************************************/
-    #[Route('/removeProductFromCart/{productId}', name: 'removeProductFromCart')]
+    #[Route('/removeProductFromCart/{productId}',
+        name: 'removeProductFromCart',
+        requirements: ['productId' => '[1-9]\d*']
+    )]
     public function removeProductFromCartAction(int $productId, EntityManagerInterface $em): Response
     {
         $orderRepository = $em->getRepository(Order::class);
