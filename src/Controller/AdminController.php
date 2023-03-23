@@ -52,25 +52,27 @@ class AdminController extends AbstractController
         return $this->render('Vue/Admin/createAdmin.html.twig', $args);
     }
 
+    /***************************************************/
+    /* Action pour afficher les utilisateur du Site
+    /***************************************************/
     #[Route('/managecustomers', name: 'managecustomers')]
     #[IsGranted('ROLE_ADMIN')]
-    public function manageCustomersAction(EntityManagerInterface $em,
-                                      UserPasswordHasherInterface $passwordHasher,
-                                      Request $requete): Response
+    public function manageCustomersAction(EntityManagerInterface $em): Response
     {
-
         $userrepo = $em->getRepository(User::class);
         $users = $userrepo->findAll();
-
-
         return $this->render('Vue/Admin/manageCustomers.html.twig',['clients'=> $users]);
     }
 
+    /***************************************************/
+    /* Action pour vider le panier d'un utilisateur par un admin
+    /***************************************************/
     #[Route('/clearCartbyAdmin/{clientid}',
         name: 'clearCartbyAdmin',
         requirements: ['clientid' => '[1-9]\d*']
     )]
-    public function clearCartAction(int $clientid,EntityManagerInterface $em): Response
+    #[IsGranted('ROLE_ADMIN')]
+    public function clearCartAdminAction(int $clientid,EntityManagerInterface $em): Response
     {
         $userRepository = $em->getRepository(User::class);
         $user = $userRepository->findOneBy(['id' => $clientid]);
@@ -83,7 +85,7 @@ class AdminController extends AbstractController
                     $orderRepository = $em->getRepository(Order::class);
                     // On cherche tout les orders liées au client
                     $orders = $orderRepository->findBy(['client' => $user]);
-                    dump($user->getRoles()[0]);
+
                     if ($orders) {
                         // On vide tout les orders liés à ce client
                         foreach ($orders as $order) {
@@ -114,16 +116,45 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_managecustomers');
     }
 
+    /***************************************************/
+    /* Action pour supprimer un utilisateur par un admin
+    /***************************************************/
+    #[Route('/removeuser/{clientid}',
+        name: 'removeuser',
+        requirements: ['clientid' => '[1-9]\d*']
+    )]
+    #[IsGranted('ROLE_ADMIN')]
+    public function RemoveUserAction(int $clientid,EntityManagerInterface $em): Response
+    {
+        $userRepository = $em->getRepository(User::class);
+        $user = $userRepository->findOneBy(['id' => $clientid]);
 
-
-
-
-
-/*   if($user->getRoles()[0] === ['ROLE_SUPERADMIN']){
-                $this->addFlash('info' , 'vous ne puvez pas supprimer un SuperAdmin !');
+        if($user !== null){
+            if(in_array("ROLE_SUPERADMIN", $user->getRoles())){
+                $this->addFlash('info' , 'vous ne pouvez pas gérer un SuperAdmin !');
             }
-            else{
+            else {
+                $orderRepository = $em->getRepository(Order::class);
+                // On cherche tout les orders liées au client
+                $orders = $orderRepository->findBy(['client' => $user]);
 
-            }*/
+                if ($orders) {
+                    // On vide le panier de l'utilisateur avant de le supprimer
+                    $this->clearCartAdminAction($clientid, $em);
+                }
+                // on le supp de la BD
+                $em->remove($user);
+
+                // On sauvegarde les changment
+                $em->flush();
+
+                $this->addFlash('info', "L utilisateur a été supprimer avec succès !");
+            }
+        }
+        else{
+            $this->addFlash('info' , 'Cette utilisateurs n existe pas !');
+        }
+        return $this->redirectToRoute('admin_managecustomers');
+    }
 
 }
