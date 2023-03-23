@@ -25,7 +25,6 @@ class AdminController extends AbstractController
                                       UserPasswordHasherInterface $passwordHasher,
                                       Request $requete): Response
     {
-
         // creation de la nouvelle personne
         $NewAdmin = new User();
 
@@ -49,6 +48,25 @@ class AdminController extends AbstractController
             'myform' => $form->createView(),
         );
 
-        return $this->render('/Vue/Admin/createAdmin.html.twig', $args);
+        return $this->render('Vue/Admin/createAdmin.html.twig', $args);
     }
+
+    #[Route('/managecustomers', name: 'managecustomers')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function manageCustomersAction(EntityManagerInterface $em,
+                                      UserPasswordHasherInterface $passwordHasher,
+                                      Request $requete): Response
+    {
+
+        $userrepo = $em->getRepository(User::class);
+        $users = $userrepo->findAll();
+
+
+        return $this->render('Vue/Admin/manageCustomers.html.twig',['clients'=> $users]);
+    }
+
+
+
+
+
 }

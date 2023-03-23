@@ -1,0 +1,95 @@
+{% extends "Layouts/body.html.twig" %}
+
+{% block main_title %}
+    {{ parent() }} : Gérer les utilisateurs
+{% endblock %}
+
+{% block stylesheet %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/Vue/Admin/manageCustomers.css') }}" type="text/css">
+{% endblock%}
+
+{% block vue %}
+    <div id="CustomersList">
+        <h2>Les utilisateurs de votre site</h2>
+            <table class="client-table">
+                <thead>
+                <tr>
+                    <th>Login</th>
+                    <th>Mot de Passe</th>
+                    <th>Nom Prénom</th>
+                    <th>Date de naissance</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for client in clients %}
+                    <tr>
+                        <td>{{ client.login  }}</td>
+                        <td>{{ client.password }}</td>
+                        <td>{{ client.nom }}  {{ client.prenom }}</td>
+                        <td>{{ client.dateNaissance.format('d/m/Y') }}</td>
+                        <td>
+                            {% for role in client.roles %}
+                                {% if role != 'ROLE_NOROLE' %}
+                                     {{ role }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for role in client.roles %}
+                                {% if role != 'ROLE_NOROLE' %}
+                                    {% if role != 'ROLE_SUPERADMIN' %}
+                                        <button type="submit">Supprimer</button>
+                                    {% endif %}
+                                {% endif %}
+
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+    </div>
+
+    <style>
+        #CustomersList {
+            background: #93c5fd;
+            margin: 20px auto;
+            max-width: 1100px;
+            border-radius: 20px;
+            color: black;
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin: 0 0 10px;
+            color : #142d4c;
+            text-decoration-line: underline;
+            font-weight: bold;
+        }
+
+        .client-table {
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .client-table th,
+        .client-table td {
+            border: 1px solid lightslategrey;
+            padding: 5px;
+            text-align: center;
+            background-color: #ccc;
+            color: black;
+        }
+
+        .client-table th {
+            background-color: lightgray;
+            color: black;
+        }
+    </style>
+{% endblock %}
+
