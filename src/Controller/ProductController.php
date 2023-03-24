@@ -18,7 +18,7 @@ class ProductController extends AbstractController
     /***************************************************/
     /*       Creer Un Produit que par un Admin
     /***************************************************/
-    #[Route('/Createproduct', name: 'Createproduct')]
+    #[Route('/createproduct', name: 'createproduct')]
     #[IsGranted('ROLE_ADMIN')]
     public function CreateproductAction(EntityManagerInterface $em , Request $requete): Response
     {
@@ -46,7 +46,7 @@ class ProductController extends AbstractController
     /***************************************************/
     /*       Afficher les Listes Des Produits Dispo
     /***************************************************/
-    #[Route('/Listproduct', name: 'Listproduct')]
+    #[Route('/listproduct', name: 'listproduct')]
     #[IsGranted('ROLE_CLIENT')]
     public function productListAction(EntityManagerInterface $em): Response
     {

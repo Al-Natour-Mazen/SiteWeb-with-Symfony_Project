@@ -31,7 +31,7 @@
                         {% endif %}
                     {% endfor %}
                     {% if produit.quantite > 0 or isporductincart%} {# s'il y a du stock ou s'il y a ce produit deja dans le panier de l'utilisateur alors on peut faire des modifications dessus #}
-                        <form method="POST" action=" {{ path('order_addPorduct') }}">
+                        <form method="POST" action=" {{ path('order_addproduct') }}">
                                 <label for="quantite">Quantité :</label>
                                 <select id="quantite" name="quantite">
                                     {% for i in range(- quantite_deja_commande, produit.quantite ) %}

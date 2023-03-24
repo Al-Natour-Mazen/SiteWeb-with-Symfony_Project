@@ -20,7 +20,7 @@ class AdminController extends AbstractController
     /***************************************************/
     /* Création d'un Admin Dispo que pour Un SuperAdmin
     /***************************************************/
-    #[Route('/createAdmin', name: 'createAdmin')]
+    #[Route('/createadmin', name: 'createadmin')]
     #[IsGranted('ROLE_SUPERADMIN')]
     public function createAdminAction(EntityManagerInterface $em,
                                       UserPasswordHasherInterface $passwordHasher,
@@ -41,7 +41,7 @@ class AdminController extends AbstractController
 
             $em->persist($NewAdmin);
             $em->flush();
-            $this->addFlash('info','L ajout de l admin a été effectue !');
+            $this->addFlash('info','l ajout de l admin a été effectue !');
             return $this->redirectToRoute('app_accueil');
         }
 
@@ -59,8 +59,8 @@ class AdminController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function manageCustomersAction(EntityManagerInterface $em): Response
     {
-        $userrepo = $em->getRepository(User::class);
-        $users = $userrepo->findAll();
+        $userRepository = $em->getRepository(User::class);
+        $users = $userRepository->findAll();
         return $this->render('Vue/Admin/manageCustomers.html.twig',['clients'=> $users]);
     }
 
@@ -99,7 +99,6 @@ class AdminController extends AbstractController
                             //On enleve l'order
                             $em->remove($order);
                         }
-
                         // On sauvegarde les changment
                         $em->flush();
 
@@ -131,7 +130,7 @@ class AdminController extends AbstractController
 
         if($user !== null){
             if($this->isAllowedtoRemove($user) ){
-                $this->addFlash('info' , 'Error vous essayez soit de supprimer un SuperAdmin ou vous même !');
+                $this->addFlash('info' , 'Error: vous essayez soit de supprimer un SuperAdmin ou vous même !');
             }
             else {
                 $orderRepository = $em->getRepository(Order::class);
