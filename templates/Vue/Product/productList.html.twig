@@ -21,13 +21,16 @@
                         <label>Desricption :</label>
                         <p> {{ produit.description }}</p>
                     {% endif %}
-                    {% if produit.quantite > 0 %}
-                        {% set quantite_deja_commande = 0 %}
-                        {% for item in panier %}
-                            {% if item.produit.id == produit.id %}
-                                {% set quantite_deja_commande = item.quantite %}
-                            {% endif %}
-                        {% endfor %}
+                {# on creer 2 variables afin de biens s'assurer pour l envoie du formulaire  #}
+                    {% set quantite_deja_commande = 0 %} {# cette variable permet de "commander" des quantites negatifs de produit et donc cela aura l'effet d'enlever le produit dans le panier et les remettre dans la BD  #}
+                    {% set isporductincart = false %} {# cette variable verifier si le produit est dans le panier si ce le cas alors on affichera le formulaire pour ajouter/enlever un produit sinon on affichera pas le formulaire #}
+                    {% for item in panier %} {# on parcout chaque item du panier et on verifier s'il est correspond à l'id du produit pour init les variables #}
+                        {% if item.produit.id == produit.id %}
+                            {% set isporductincart = true %}
+                            {% set quantite_deja_commande = item.quantite %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if produit.quantite > 0 or isporductincart%} {# s'il y a du stock ou s'il y a ce produit deja dans le panier de l'utilisateur alors on peut faire des modifications dessus #}
                         <form method="POST" action=" {{ path('order_addPorduct') }}">
                                 <label for="quantite">Quantité :</label>
                                 <select id="quantite" name="quantite">
@@ -77,6 +80,14 @@
 
 {% endblock %}
 
+
+{#
+
+{% for item in panier %}
+    {% if item.produit.id == produit.id %}
+        {% set quantite_deja_commande = item.quantite %}
+    {% endif %}
+{% endfor %}#}
 
 {# {{ path('produit_modifier', {'id': produit.id}) }} #}
 

@@ -232,7 +232,6 @@ class OrderController extends AbstractController
         $productRepository = $em->getRepository(Produit::class);
 
         // On Récurpere le Client actuellement connecte
-        // On le fait en dur pour le moment
         $client = $this->getUser();
 
         // on cherche le produit à enlever pour verifier si ce produit existe
