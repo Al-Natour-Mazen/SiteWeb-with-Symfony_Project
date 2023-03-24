@@ -41,7 +41,7 @@ class AdminController extends AbstractController
 
             $em->persist($NewAdmin);
             $em->flush();
-            $this->addFlash('info','L\'ajout de l\'admin a été effectue !');
+            $this->addFlash('info','L ajout de l admin a été effectue !');
             return $this->redirectToRoute('app_accueil');
         }
 
@@ -78,7 +78,7 @@ class AdminController extends AbstractController
         $user = $userRepository->findOneBy(['id' => $clientid]);
 
         if($user !== null){
-                if(in_array("ROLE_SUPERADMIN", $user->getRoles())){
+                if($this->isSuperAdmin($user)){
                     $this->addFlash('info' , 'vous ne pouvez pas gérer un SuperAdmin !');
                 }
                 else {
@@ -130,8 +130,8 @@ class AdminController extends AbstractController
         $user = $userRepository->findOneBy(['id' => $clientid]);
 
         if($user !== null){
-            if(in_array("ROLE_SUPERADMIN", $user->getRoles())){
-                $this->addFlash('info' , 'vous ne pouvez pas gérer un SuperAdmin !');
+            if($this->isAllowedtoRemove($user) ){
+                $this->addFlash('info' , 'Error vous essayez soit de supprimer un SuperAdmin ou vous même !');
             }
             else {
                 $orderRepository = $em->getRepository(Order::class);
@@ -156,5 +156,21 @@ class AdminController extends AbstractController
         }
         return $this->redirectToRoute('admin_managecustomers');
     }
+
+    private function isSuperAdmin(User $user): bool
+    {
+        return (in_array("ROLE_SUPERADMIN", $user->getRoles()));
+    }
+
+    private function isSameUser(User $user):bool
+    {
+        return $user === $this->getUser();
+    }
+
+    private function isAllowedtoRemove(User $user):bool
+    {
+        return $this->isSuperAdmin($user) || $this->isSameUser($user);
+    }
+
 
 }
