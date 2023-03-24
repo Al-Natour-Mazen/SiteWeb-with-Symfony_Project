@@ -2,12 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/', name: 'app')]
@@ -35,9 +32,9 @@ class AccueilController extends AbstractController
         $isClient = false;
 
         $nbproduits = 0;
-        // On compte tous les produits dans son panier
+
         if($user !== null) {
-            $nbproduits = count($user->getOrders());
+            $nbproduits = count($user->getOrders()); // On compte tous les produits dans son panier
             $isAuth = true;
             if ($this->isGranted('ROLE_SUPERADMIN'))
                 $isSuperAdmin = true;
@@ -46,10 +43,6 @@ class AccueilController extends AbstractController
             if ($this->isGranted('ROLE_CLIENT'))
                 $isClient = true;
         }
-
-
-
-
         $args = array(
             'isAuth'=> $isAuth,
             'isAdmin' => $isAdmin,

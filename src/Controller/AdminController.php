@@ -82,26 +82,23 @@ class AdminController extends AbstractController
                     $this->addFlash('info' , 'vous ne pouvez pas gérer un SuperAdmin !');
                 }
                 else {
-                    $orderRepository = $em->getRepository(Order::class);
                     // On cherche tout les orders liées au client
+                    $orderRepository = $em->getRepository(Order::class);
                     $orders = $orderRepository->findBy(['client' => $user]);
-
                     if ($orders) {
                         // On vide tout les orders liés à ce client
                         foreach ($orders as $order) {
-
                             //On re recupere le produit pour le remttre dans la BD
                             $product = $order->getProduit();
                             if ($product) {
                                 $product->setQuantite($product->getQuantite() + $order->getQuantite());
                             }
-
                             //On enleve l'order
                             $em->remove($order);
                         }
                         // On sauvegarde les changment
                         $em->flush();
-
+                        // on ajoute un msg flash pour informé
                         $this->addFlash('info', "Le Panier a été vider avec succès !");
                     } else {
                         $this->addFlash('info', "Cette utilisateur n a pas de panier en cours !");
@@ -109,9 +106,9 @@ class AdminController extends AbstractController
                 }
         }
         else{
+            // on ajoute un msg flash pour informé
             $this->addFlash('info' , 'Cette utilisateurs n existe pas !');
         }
-
         return $this->redirectToRoute('admin_managecustomers');
     }
 
@@ -129,7 +126,7 @@ class AdminController extends AbstractController
         $user = $userRepository->findOneBy(['id' => $clientid]);
 
         if($user !== null){
-            if($this->isAllowedtoRemove($user) ){
+            if($this->isNotAllowedtoRemove($user) ){
                 $this->addFlash('info' , 'Error: vous essayez soit de supprimer un SuperAdmin ou vous même !');
             }
             else {
@@ -143,10 +140,9 @@ class AdminController extends AbstractController
                 }
                 // on le supp de la BD
                 $em->remove($user);
-
                 // On sauvegarde les changment
                 $em->flush();
-
+                // on ajoute un msg flash pour informé
                 $this->addFlash('info', "L utilisateur a été supprimer avec succès !");
             }
         }
@@ -156,17 +152,24 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_managecustomers');
     }
 
+    /***************************************************/
+    /* Fonction interne pour savoir si l'utilisateur en parametere est un SUPERADMIN
+    /***************************************************/
     private function isSuperAdmin(User $user): bool
     {
         return (in_array("ROLE_SUPERADMIN", $user->getRoles()));
     }
-
+    /***************************************************/
+    /* Fonction interne pour savoir si l'utilisateur en parametere est lui-même
+    /***************************************************/
     private function isSameUser(User $user):bool
     {
         return $user === $this->getUser();
     }
-
-    private function isAllowedtoRemove(User $user):bool
+    /***************************************************/
+    /* Fonction interne combinant les 2 autres
+    /***************************************************/
+    private function isNotAllowedtoRemove(User $user):bool
     {
         return $this->isSuperAdmin($user) || $this->isSameUser($user);
     }

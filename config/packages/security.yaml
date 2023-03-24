@@ -37,7 +37,7 @@ security:
     access_control:
         - { path: ^/$, roles: PUBLIC_ACCESS }
         - { path: ^/account/connect$, roles: PUBLIC_ACCESS }
-        - { path: ^/account/createAccount$, roles: PUBLIC_ACCESS }
+        - { path: ^/account/createaccount$, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: IS_AUTHENTICATED_REMEMBERED }
 
 when@test:

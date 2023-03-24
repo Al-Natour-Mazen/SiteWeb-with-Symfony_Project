@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Order;
 use App\Entity\Produit;
-use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,33 +22,26 @@ class OrderController extends AbstractController
     #[Route('', name: 'addproduct')]
     public function addProductToCart(Request $request, EntityManagerInterface $em)
     {
-
-        $productRepository = $em->getRepository(Produit::class);
-        $orderRepository = $em->getRepository(Order::class);
-
         // Récupération de l'utilisateur actuel
         $client = $this->getUser();
-
         //on récupère l'id du produit
         $id = $request->request->get('id');
-
         // Récupération du produit en fonction de l'ID
+        $productRepository = $em->getRepository(Produit::class);
         $produit = $productRepository->findOneBy(['id' => $id]);
-
         // Si le produit n'existe pas, on redirige vers la liste des produits
         if ($produit === null) {
             return $this->redirectToRoute('product_listproduct');
         } else {
             // Récupération de la quantité commandée dans le formulaire
             $quantite = $request->request->get('quantite');
-
             // Vérification si une commande pour ce produit existe déjà pour l'utilisateur actuel
+            $orderRepository = $em->getRepository(Order::class);
             $order = $orderRepository->findOneBy(['client' => $client, 'produit' => $produit]);
             $quantiteDejaCommande = 0;
             if ($order !== null) {
                 $quantiteDejaCommande = $order->getQuantite();
             }
-
             // Vérification de la validité de la quantité commandée
             if ($quantite < $quantiteDejaCommande * -1 || $quantite > $produit->getQuantite()) {
                 $this->addFlash('info', 'Quantité invalide');
@@ -128,7 +120,7 @@ class OrderController extends AbstractController
             }
             // On sauvegarde les changment
             $em->flush();
-
+            // On ajoute un msg flash pour informé
             $this->addFlash('info',"Votre Panier a été vider avec succès !");
         }else{
             $this->addFlash('info',"Votre Panier n'a pas été vider, Un probléme est survenue !");
@@ -197,88 +189,17 @@ class OrderController extends AbstractController
             }
             // On sauvegarde les changements
             $em->flush();
-
+            // On ajoute un msg flash pour informé
             $this->addFlash('info',"Votre Commande a été passé, Merci pour votre Confiance !");
         }
         else{
             $this->addFlash('info',"Votre Commande n'est pas passé, Un probléme est survenue !");
         }
-
         return $this->redirectToRoute('order_clientcart');
     }
+
 }
 
 
 
 
-
-/*public function addPorductAction(Request $request,EntityManagerInterface $em): Response
-{
-    // Si le formulaire a été soumis
-    if ($request->isMethod('POST')) {
-
-        $productRepository = $em->getRepository(Produit::class);
-        $orderRepository = $em->getRepository(Order::class);
-
-        // Récupération de l'utilisateur actuel
-        $client = $this->getUser();
-
-        //on recupere l'id du produit
-        $id = $request->request->get('id');
-
-        // Récupération du produit en fonction de l'ID
-        $produit = $productRepository->findOneBy(['id' => $id]);
-
-        // Si le produit n'existe pas, on redirige vers la liste des produits
-        if (!$produit) {
-            return $this->redirectToRoute('product_Listproduct');
-        }
-        else{
-            // Récupération de la quantité commandée dans le formulaire
-            $quantite = $request->request->get('quantite');
-
-            // Vérification si une commande pour ce produit existe déjà pour l'utilisateur actuel
-            $order = $orderRepository->findOneBy(['client' => $client, 'produit' => $produit]);
-            $quantiteDejaCommande = 0;
-            if($order !== null)
-                $quantiteDejaCommande =  $order->getQuantite();
-
-            // Vérification de la validité de la quantité commandée
-            if ($quantite < $quantiteDejaCommande || $quantite > $produit->getQuantite()) {
-                $this->addFlash('error', 'Quantité invalide');
-            } else if ($quantite > 0){
-                // Si une commande existe déjà, on met à jour la quantité commandée
-                if ($order) {
-                    $order->setQuantite($order->getQuantite() + $quantite);
-                } else {
-                    // Sinon, on crée une nouvelle commande
-                    $order = new Order();
-                    $order->setClient($client);
-                    $order->setProduit($produit);
-                    $order->setQuantite($quantite);
-                    $em->persist($order);
-                }
-
-                // Mise à jour de la quantité en stock du produit
-                $produit->setQuantite($produit->getQuantite() - $quantite);
-
-                // Enregistrement des modifications dans la base de données
-                $em->flush();
-
-                // Ajout d'un message de confirmation à la page
-                $this->addFlash('info', 'Produit ajouté au panier avec succès !');
-            }
-            else if ($quantite < 0 ){
-                $em->remove($order);
-                $produit->setQuantite($produit->getQuantite() + $quantite);
-
-                // Enregistrement des modifications dans la base de données
-                $em->flush();
-
-                // Ajout d'un message de confirmation à la page
-                $this->addFlash('info', 'Quntite retiré de votre panier !');
-            }
-        }
-    }
-    return $this->redirectToRoute('order_ClientCart');
-}*/

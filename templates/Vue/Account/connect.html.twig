@@ -50,39 +50,7 @@
             </button>
         </form>
         <div class="form-section">
-            <p>Vous n'avez pas de compte ? <a href="{{ path('account_createAccount') }}">Créer en un :)</a> </p>
+            <p>Vous n'avez pas de compte ? <a href="{{ path('account_createaccount') }}">Créer en un :)</a> </p>
         </div>
     </div>
 {% endblock %}
-
-
-
-{#
-{% extends "Layouts/body.html.twig" %}
-
-{% block main_title %}
-    {{ parent() }} : Connexion
-
-{% endblock %}
-
-{% block stylesheet %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/Vue/Account/connect.css') }}" type="text/css">
-{% endblock%}
-
-{% block vue %}
-    <div class="form-box">
-        <form action="" class="form" method="post">
-            <span class="title">Connexion</span>
-            <div class="form-container">
-                <input type="Name" class="input" placeholder="Nom d'utilisateur">
-                <input type="password" class="input" placeholder="Mot de Passe">
-            </div>
-            <button type="submit">Se connecter</button>
-        </form>
-        <div class="form-section">
-            <p>Vous n'avez pas de compte ? <a href="{{ path('account_createAccount') }}">Créer en un :)</a> </p>
-        </div>
-    </div>
-{% endblock %}
-#}

@@ -49,12 +49,11 @@ class AccountController extends AbstractController
     /***************************************************/
     /*                Création d'un compte
     /***************************************************/
-    #[Route('/createAccount', name: 'createAccount')]
+    #[Route('/createaccount', name: 'createaccount')]
     public function createAccountAction(EntityManagerInterface $em ,
                                         UserPasswordHasherInterface $passwordHasher,
                                         Request $requete,
-                                        CheckPassword $checkPassword
-    ): Response
+                                        CheckPassword $checkPassword): Response
     {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_accueil');
@@ -71,7 +70,7 @@ class AccountController extends AbstractController
 
             if (!$checkPassword->check($TheNewOne->getPassword())) {
                 $this->addFlash('info','Votre mot de passe n\'est pas valide (service)');
-                return $this->redirectToRoute('account_createAccount');
+                return $this->redirectToRoute('account_createaccount');
             }
             else {
                 $hashedPassword = $passwordHasher->hashPassword($TheNewOne, $TheNewOne->getPassword());
@@ -113,7 +112,7 @@ class AccountController extends AbstractController
             $em->flush();
             $this->addFlash('info','Votre compte a été modifier !');
             if($this->isGranted('ROLE_CLIENT'))
-                return $this->redirectToRoute('product_Listproduct');
+                return $this->redirectToRoute('product_listproduct');
             else if ($this->isGranted('ROLE_SUPERADMIN' ))
                 return $this->redirectToRoute('app_accueil');
         }

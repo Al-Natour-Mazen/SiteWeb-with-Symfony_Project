@@ -52,9 +52,8 @@ class ProductController extends AbstractController
     {
         //on recupere le client déjà connecte
         $client = $this->getUser();
+        // on recupere ses commandes
         $orders = $client->getOrders();
-
-
         //On recupére tout les produits de la BD et on les envoie à la vue
         $productsrepository = $em->getRepository(Produit::class);
         $products = $productsrepository->findAll();
