@@ -31,7 +31,7 @@
                         <form method="POST" action=" {{ path('order_addPorduct') }}">
                                 <label for="quantite">Quantité :</label>
                                 <select id="quantite" name="quantite">
-                                    {% for i in range(- quantite_deja_commande, produit.quantite - quantite_deja_commande + 1) %}
+                                    {% for i in range(- quantite_deja_commande, produit.quantite ) %}
                                         <option value="{{ i }}" {% if i == 1 %}selected{% endif %}>{{ i }}</option>
                                     {% endfor %}
                                 </select>
