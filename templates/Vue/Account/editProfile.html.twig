@@ -6,11 +6,29 @@
 
 {% block stylesheet %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/Vue/Account/editProfile.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/Layouts/Forms.css') }}" type="text/css">
 {% endblock%}
 
 {% block vue %}
+    <div class="box">
+        {% if form_errors(myform) %}
+            <div class="alert">{{ form_errors(form) }}</div>
+        {% endif %}
 
-    {{ form(myform) }}
+        {{ form_start(myform) }}
+        <span class="title">Gérer son Profile</span>
+        <div class="container">
+            {{ form_row(myform.nom) }}
+            {{ form_row(myform.prenom) }}
+            {{ form_row(myform.login) }}
+            {{ form_row(myform.password) }}
+            {{ form_row(myform.dateNaissance) }}
+        </div>
+        {{ form_row(myform.modify) }}
+        <div class="section">
+            <p>Le saviez-vous ? C'est important de manger 5 fruits et légumes par jour <a href="https://www.mangerbouger.fr/" target="_blank">mangerbouger.fr</a> </p>
+        </div>
+        {{ form_end(myform) }}
+    </div>
 {% endblock %}
 
