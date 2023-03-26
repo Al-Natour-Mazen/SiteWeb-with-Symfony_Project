@@ -1,0 +1,91 @@
+label{
+    text-decoration-line: underline;
+}
+input{
+    margin-top: 5px;
+    color: white;
+    background-color: #8796b5;
+    outline: 0;
+    height: 20px;
+    width: 100%;
+    border: 2px solid midnightblue;
+    font-size: .9rem;
+}
+
+.box {
+    max-width: 450px;
+    background: darkgrey;
+    overflow: hidden;
+    border-radius: 16px;
+    color: #010101;
+    margin: 20px auto 0;
+    padding: 10px;
+}
+
+.container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 24px 24px;
+    gap: 16px;
+    text-align: center;
+    background: #cfcfcf;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+.alert{
+    background-color: #B0413E;
+    border-color: #f5c6cb;
+    color: #cccccc;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    text-decoration-line: underline;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 1.6rem;
+    text-decoration-line: underline;
+}
+
+.section {
+    border-radius: 8px;
+    margin: 1rem 1rem -1rem -1rem;
+    width: 100%;
+    padding: 16px;
+    font-size: .85rem;
+    background-color: #e0ecfb;
+    box-shadow: rgb(0 0 0 / 8%) 0 -1px;
+}
+
+.section a {
+    font-weight: bold;
+    color: #0066ff;
+    transition: color .3s ease;
+}
+
+.section a:hover {
+    color: #005ce6;
+    text-decoration: underline;
+}
+
+/*Button*/
+button {
+    background-color: #0066ff;
+    color: #fff;
+    border: 0;
+    border-radius: 24px;
+    padding: 10px 16px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color .3s ease;
+    width: 280px;
+}
+
+button:hover {
+    background-color: #005ce6;
+}
+

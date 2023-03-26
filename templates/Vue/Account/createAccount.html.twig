@@ -6,11 +6,29 @@
 
 {% block stylesheet %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/Vue/Account/createAccount.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/Layouts/Forms.css') }}" type="text/css">
 {% endblock%}
 
 {% block vue %}
-    {# WORK IN PROGRESS #}
-    {{ form(myform) }}
+    <div class="box">
+        {% if form_errors(myform) %}
+            <div class="alert">{{ form_errors(form) }}</div>
+        {% endif %}
+
+        {{ form_start(myform) }}
+        <span class="title">Création De Compte</span>
+        <div class="container">
+            {{ form_row(myform.nom) }}
+            {{ form_row(myform.prenom) }}
+            {{ form_row(myform.login) }}
+            {{ form_row(myform.password) }}
+            {{ form_row(myform.dateNaissance) }}
+        </div>
+        {{ form_row(myform.send) }}
+        <div class="section">
+            <p>Vous avez déjà un compte ? <a href="{{ path('account_connect') }}">Connectez-vous :)</a> </p>
+        </div>
+        {{ form_end(myform) }}
+    </div>
 {% endblock %}
 
