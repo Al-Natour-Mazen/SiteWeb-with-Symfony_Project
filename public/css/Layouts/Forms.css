@@ -1,7 +1,7 @@
 label{
     text-decoration-line: underline;
 }
-input{
+input,textarea{
     margin-top: 5px;
     color: white;
     background-color: #8796b5;

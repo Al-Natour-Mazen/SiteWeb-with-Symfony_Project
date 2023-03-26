@@ -6,10 +6,28 @@
 
 {% block stylesheet %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/Vue/Products/CreateProduct.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/Layouts/Forms.css') }}" type="text/css">
 {% endblock%}
 
 {% block vue %}
-    {{ form(myform) }}
+    <div class="box">
+        {% if form_errors(myform) %}
+            <div class="alert">{{ form_errors(form) }}</div>
+        {% endif %}
+
+        {{ form_start(myform) }}
+        <span class="title">Création D'un Produit</span>
+        <div class="container">
+            {{ form_row(myform.libelle) }}
+            {{ form_row(myform.prixUnitaire) }}
+            {{ form_row(myform.quantite) }}
+            {{ form_row(myform.description) }}
+        </div>
+        {{ form_row(myform.send) }}
+        <div class="section">
+            <p>Le saviez-vous ? Les <a href="https://fr.wikipedia.org/wiki/Cornichon" target="_blank">cornichons</a>  sont des fruits !</p>
+        </div>
+        {{ form_end(myform) }}
+    </div>
 {% endblock %}
 

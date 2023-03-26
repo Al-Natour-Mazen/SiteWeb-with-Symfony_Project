@@ -16,19 +16,19 @@ class ProductType extends AbstractType
         $builder
             ->add('libelle',
                 TextType::class,
-                ['label' => 'Libelle  '])
+                ['label' => 'Libelle'])
             ->add('prixUnitaire',
                 IntegerType::class,
-                ['label' => 'PrixUnitaire '])
+                ['label' => 'PrixUnitaire'])
             ->add('quantite',
                 IntegerType::class,
-                ['label' => 'Quantite '])
+                ['label' => 'Quantite'])
             ->add('description',
                 TextareaType::class,
-                ['label' => 'Description ',
-                    'attr' => ['placeholder' => 'facultatif',
-                               'style' => 'height : 100px; width: 400px ; resize: none;',
-                               'maxlength' => 500],
+                ['label' => 'Description',
+                    'attr' => ['placeholder' => 'facultatif (200 Caractères maximum) ',
+                               'style' => 'height : 100px; width: 300px ; resize: none; margin :5px auto',
+                               'maxlength' => 200],
                     'required' => false])
         ;
     }
