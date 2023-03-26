@@ -6,11 +6,29 @@
 
 {% block stylesheet %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/Vue/Admin/CreateAdmin.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('css/Layouts/Forms.css') }}" type="text/css">
 {% endblock%}
 
 {% block vue %}
-    {# WORK IN PROGRESS #}
-    {{ form(myform) }}
+    <div class="box">
+        {% if form_errors(myform) %}
+            <div class="alert">{{ form_errors(form) }}</div>
+        {% endif %}
+
+        {{ form_start(myform) }}
+        <span class="title">Création D'un Admin</span>
+        <div class="container">
+            {{ form_row(myform.nom) }}
+            {{ form_row(myform.prenom) }}
+            {{ form_row(myform.login) }}
+            {{ form_row(myform.password) }}
+            {{ form_row(myform.dateNaissance) }}
+        </div>
+        {{ form_row(myform.send) }}
+        <div class="section">
+            <p>Le saviez-vous ? Les <a href="https://fr.wikipedia.org/wiki/Noix_de_coco" target="_blank">noix de coco</a> tuent plus de gens que les <a href="https://fr.wikipedia.org/wiki/Requin" target="_blank">requins</a> !</p>
+        </div>
+        {{ form_end(myform) }}
+    </div>
 {% endblock %}
 
