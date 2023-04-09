@@ -59,7 +59,7 @@ class AccountController extends AbstractController
         }
         // creation de la nouvelle personne
         $TheNewOne = new User();
-
+        //on cree le formulaire et on l'hydrate
         $form =  $this->createForm(UserType::class,$TheNewOne);
         $form->add('send',SubmitType::class,['label' =>'Créer mon compte']);
         $form->handleRequest($requete);
@@ -72,6 +72,7 @@ class AccountController extends AbstractController
                 return $this->redirectToRoute('account_createaccount');
             }
             else {
+                //on hashe le mdp de l'utilisateur
                 $hashedPassword = $passwordHasher->hashPassword($TheNewOne, $TheNewOne->getPassword());
                 $TheNewOne->setPassword($hashedPassword);
 
