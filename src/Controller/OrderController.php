@@ -31,10 +31,11 @@ class OrderController extends AbstractController
         $produit = $productRepository->findOneBy(['id' => $id]);
         // Si le produit n'existe pas, on redirige vers la liste des produits
         if ($produit === null) {
+            $this->addFlash('info', 'Ce Produit n existe pas !');
             return $this->redirectToRoute('product_listproduct');
         } else {
-            // Récupération de la quantité commandée dans le formulaire
-            $quantite = $request->request->get('quantite');
+            // Récupération de la quantité à commander dans le formulaire
+            $quantiteACommande = $request->request->get('quantite');
             // Vérification si une commande pour ce produit existe déjà pour l'utilisateur actuel
             $orderRepository = $em->getRepository(Order::class);
             $order = $orderRepository->findOneBy(['client' => $client, 'produit' => $produit]);
@@ -42,39 +43,41 @@ class OrderController extends AbstractController
             if ($order !== null) {
                 $quantiteDejaCommande = $order->getQuantite();
             }
-            // Vérification de la validité de la quantité commandée
-            if ($quantite < $quantiteDejaCommande * -1 || $quantite > $produit->getQuantite()) {
-                $this->addFlash('info', 'Quantité invalide');
-            }if ($quantite == 0) {
+            // Vérification de la validité de la quantité à commander
+            if ($quantiteACommande < $quantiteDejaCommande * -1 || $quantiteACommande > $produit->getQuantite()) {
+                $this->addFlash('info', 'Quantité invalide !');
+                return $this->redirectToRoute('product_listproduct');
+            }
+            if ($quantiteACommande == 0) {
                 // Si la quantité est nulle, on ne fait rien
-                $this->addFlash('info' , 'Vous ne pouvez pas ajouter une quantite egale a zero');
+                $this->addFlash('info' , 'Vous ne pouvez pas ajouter une quantite egale a zero !');
                 return $this->redirectToRoute('product_listproduct');
             } else {
                 // Si une commande existe déjà, on met à jour la quantité commandée
                 if ($order !== null) {
-                    $newQuantite = $quantiteDejaCommande + $quantite;
-                    if ($newQuantite === 0) {
+                    $newQuantiteOrder = $quantiteDejaCommande + $quantiteACommande;
+                    if ($newQuantiteOrder === 0) {
                         $em->remove($order);
                     } else {
-                        $order->setQuantite($newQuantite);
+                        $order->setQuantite($newQuantiteOrder);
                     }
                 } else {
                     // Sinon, on crée une nouvelle commande
                     $neworder = new Order();
                     $neworder->setClient($client);
                     $neworder->setProduit($produit);
-                    $neworder->setQuantite($quantite);
+                    $neworder->setQuantite($quantiteACommande);
                     $em->persist($neworder);
                 }
                 // Mise à jour de la quantité en stock du produit
-                $produit->setQuantite($produit->getQuantite() - $quantite);
-                // Enregistrement des modifications dans la base de données
+                $produit->setQuantite($produit->getQuantite() - $quantiteACommande);
+                // Enregistrement des modifications dans la BD
                 $em->flush();
                 // Ajout d'un message de confirmation à la page
-                if($quantite > 0 )
-                    $this->addFlash('info', 'Produit ajouté au panier avec succès !');
+                if($quantiteACommande > 0 )
+                    $this->addFlash('info', 'Produit ajoute au panier avec succes !');
                 else
-                    $this->addFlash('info', 'Produit retiré du panier !');
+                    $this->addFlash('info', 'Produit retire du panier avec succes !');
             }
         }
         return $this->redirectToRoute('order_clientcart');
@@ -120,9 +123,9 @@ class OrderController extends AbstractController
             // On sauvegarde les changment
             $em->flush();
             // On ajoute un msg flash pour informé
-            $this->addFlash('info',"Votre Panier a été vider avec succès !");
+            $this->addFlash('info','Votre Panier a ete vider avec succes !');
         }else{
-            $this->addFlash('info',"Votre Panier n'a pas été vider, Un probléme est survenue !");
+            $this->addFlash('info','Votre Panier n a pas ete vider, Un probleme est survenue !');
         }
         return $this->redirectToRoute('order_clientcart');
     }
