@@ -20,7 +20,7 @@ class OrderController extends AbstractController
     /*      Gérer l'ajout au panier
     /***************************************************/
     #[Route('', name: 'addproduct')]
-    public function addProductToCart(Request $request, EntityManagerInterface $em)
+    public function addProductToCartAction(Request $request, EntityManagerInterface $em)
     {
         // Récupération de l'utilisateur actuel
         $client = $this->getUser();
@@ -57,15 +57,14 @@ class OrderController extends AbstractController
                         $em->remove($order);
                     } else {
                         $order->setQuantite($newQuantite);
-                        $em->persist($order);
                     }
                 } else {
                     // Sinon, on crée une nouvelle commande
-                    $order = new Order();
-                    $order->setClient($client);
-                    $order->setProduit($produit);
-                    $order->setQuantite($quantite);
-                    $em->persist($order);
+                    $neworder = new Order();
+                    $neworder->setClient($client);
+                    $neworder->setProduit($produit);
+                    $neworder->setQuantite($quantite);
+                    $em->persist($neworder);
                 }
                 // Mise à jour de la quantité en stock du produit
                 $produit->setQuantite($produit->getQuantite() - $quantite);
