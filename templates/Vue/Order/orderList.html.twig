@@ -12,7 +12,7 @@
 {% block vue %}
     <div class="cart-container">
         <h2>Mon Panier</h2>
-        {% if produits is empty%}
+        {% if orders is empty%}
             <p class="EmptyOrder">Votre panier est vide. Allez <a href="{{ path('product_listproduct') }}">ici</a> pour commander 😉</p>
         {% else %}
             <table class="cart-table">
@@ -28,16 +28,16 @@
                 <tbody>
                     {% set total_articles = 0 %}
                     {% set prix_total = 0 %}
-                    {% for produit in produits %}
+                    {% for order in orders %}
                         <tr>
-                            <td>{{ produit.produit.libelle }}</td>
-                            <td>{{ produit.produit.prixUnitaire }} €</td>
-                            <td>{{ produit.quantite }}</td>
-                            <td>{{ produit.produit.prixUnitaire * produit.quantite }} €</td>
-                            <td> <a href="{{ path('order_removeproductfromcart', {'productId': produit.produit.id }) }}"><img src="{{ asset('images/Logo/Supp_icon.png') }}" width="25px" height="25px" title="Supprimer Ce Produit Du Panier"></a></td>
+                            <td>{{ order.produit.libelle }}</td>
+                            <td>{{ order.produit.prixUnitaire }} €</td>
+                            <td>{{ order.quantite }}</td>
+                            <td>{{ order.produit.prixUnitaire * order.quantite }} €</td>
+                            <td> <a href="{{ path('order_removeproductfromcart', {'productId': order.produit.id }) }}"><img src="{{ asset('images/Logo/Supp_icon.png') }}" width="25px" height="25px" title="Supprimer Ce Produit Du Panier"></a></td>
                         </tr>
-                        {% set total_articles = total_articles + produit.quantite %}
-                        {% set prix_total = prix_total + produit.produit.prixUnitaire * produit.quantite %}
+                        {% set total_articles = total_articles + order.quantite %}
+                        {% set prix_total = prix_total + order.produit.prixUnitaire * order.quantite %}
                     {% endfor %}
                     <tr>
                         <td colspan="2">Total :</td>

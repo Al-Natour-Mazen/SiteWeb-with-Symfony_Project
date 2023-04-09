@@ -49,7 +49,7 @@ class OrderController extends AbstractController
                 return $this->redirectToRoute('product_listproduct');
             }
             if ($quantiteACommande == 0) {
-                // Si la quantité est nulle, on ne fait rien
+                // Si la quantité à commander est nulle, on ne fait rien
                 $this->addFlash('info' , 'Vous ne pouvez pas ajouter une quantite egale a zero !');
                 return $this->redirectToRoute('product_listproduct');
             } else {
@@ -92,9 +92,9 @@ class OrderController extends AbstractController
         //on recupere le client connecte
         $client = $this->getUser();
         // Récupération de tous les produits dans son panier
-        $produits = $client->getOrders();
+        $orders = $client->getOrders();
         // Affichage de la vue du panier
-        return $this->render('Vue/Order/orderList.html.twig', ['produits' => $produits]);
+        return $this->render('Vue/Order/orderList.html.twig', ['orders' => $orders]);
     }
 
 
@@ -120,7 +120,7 @@ class OrderController extends AbstractController
                 //On enleve l'order
                 $em->remove($order);
             }
-            // On sauvegarde les changment
+            // On sauvegarde les changments
             $em->flush();
             // On ajoute un msg flash pour informé
             $this->addFlash('info','Votre Panier a ete vider avec succes !');
@@ -159,14 +159,14 @@ class OrderController extends AbstractController
                 // On enregistre les modifs dans la BD
                 $em->flush();
                 // On ajoute un msg flash pour informé
-                $this->addFlash('info', "Le produit a été retiré de votre panier avec succès !");
+                $this->addFlash('info', 'Le produit a ete retire de votre panier avec succes !');
             } else {
                 // On ajoute un msg flash pour informé
-                $this->addFlash('info', "Le produit n a pas été trouvé dans votre panier !");
+                $this->addFlash('info', 'Le produit n a pas ete trouvé dans votre panier !');
             }
         } else {
             // On ajoute un msg flash pour informé
-            $this->addFlash('info', "Le produit specifie n existe pas.");
+            $this->addFlash('info', 'Le produit specifie n existe pas !');
         }
         return $this->redirectToRoute('order_clientcart');
     }
@@ -192,10 +192,10 @@ class OrderController extends AbstractController
             // On sauvegarde les changements
             $em->flush();
             // On ajoute un msg flash pour informé
-            $this->addFlash('info',"Votre Commande a été passé, Merci pour votre Confiance !");
+            $this->addFlash('info','Votre Commande a ete passe, Merci pour votre Confiance !');
         }
         else{
-            $this->addFlash('info',"Votre Commande n'est pas passé, Un probléme est survenue !");
+            $this->addFlash('info','Votre Commande n est pas passe, Un probleme est survenue !');
         }
         return $this->redirectToRoute('order_clientcart');
     }
