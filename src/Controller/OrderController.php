@@ -52,7 +52,7 @@ class OrderController extends AbstractController
             } else {
                 // Si une commande existe déjà, on met à jour la quantité commandée
                 if ($order !== null) {
-                    $newQuantite = $order->getQuantite() + $quantite;
+                    $newQuantite = $quantiteDejaCommande + $quantite;
                     if ($newQuantite === 0) {
                         $em->remove($order);
                     } else {

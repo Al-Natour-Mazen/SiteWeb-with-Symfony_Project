@@ -29,6 +29,7 @@ class AdminController extends AbstractController
         // creation de la nouvelle personne
         $NewAdmin = new User();
 
+        //on cree le formulaire et on l'hydrate
         $form =  $this->createForm(UserType::class,$NewAdmin);
         $form->add('send',SubmitType::class,['label' =>'Ajouter un Admin']);
         $form->handleRequest($requete);
@@ -36,12 +37,13 @@ class AdminController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             $NewAdmin->setRoles(['ROLE_ADMIN']);
 
+            //on hashe le mdp de l'utilisateur
             $hashedPassword = $passwordHasher->hashPassword($NewAdmin, $NewAdmin->getPassword());
             $NewAdmin->setPassword($hashedPassword);
 
             $em->persist($NewAdmin);
             $em->flush();
-            $this->addFlash('info','l ajout de l admin a été effectue !');
+            $this->addFlash('info','l ajout de l admin a ete effectue !');
             return $this->redirectToRoute('app_accueil');
         }
 
@@ -79,7 +81,7 @@ class AdminController extends AbstractController
 
         if($user !== null){
                 if($this->isSuperAdmin($user)){
-                    $this->addFlash('info' , 'vous ne pouvez pas gérer un SuperAdmin !');
+                    $this->addFlash('info' , 'Error: vous ne pouvez pas gerer un SuperAdmin !');
                 }
                 else {
                     // On cherche tout les orders liées au client
@@ -99,9 +101,9 @@ class AdminController extends AbstractController
                         // On sauvegarde les changment
                         $em->flush();
                         // on ajoute un msg flash pour informé
-                        $this->addFlash('info', "Le Panier a été vider avec succès !");
+                        $this->addFlash('info', 'Le Panier a ete vider avec succes !');
                     } else {
-                        $this->addFlash('info', "Cette utilisateur n a pas de panier en cours !");
+                        $this->addFlash('info', 'Cette utilisateur n a pas de panier en cours !');
                     }
                 }
         }
@@ -126,14 +128,16 @@ class AdminController extends AbstractController
         $user = $userRepository->findOneBy(['id' => $clientid]);
 
         if($user !== null){
-            if($this->isNotAllowedtoRemove($user) ){
-                $this->addFlash('info' , 'Error: vous essayez soit de supprimer un SuperAdmin ou vous même !');
+            if($this->isSuperAdmin($user)){
+                $this->addFlash('info' , 'Error: vous essayez de supprimer un SuperAdmin !');
+            }
+            else if($this->isSameUser($user)){
+                $this->addFlash('info' , 'Error: vous essayez de supprimer vous meme !');
             }
             else {
                 $orderRepository = $em->getRepository(Order::class);
                 // On cherche tout les orders liées au client
                 $orders = $orderRepository->findBy(['client' => $user]);
-
                 if ($orders) {
                     // On vide le panier de l'utilisateur avant de le supprimer
                     $this->clearCartAdminAction($clientid, $em);
@@ -143,7 +147,7 @@ class AdminController extends AbstractController
                 // On sauvegarde les changment
                 $em->flush();
                 // on ajoute un msg flash pour informé
-                $this->addFlash('info', "L utilisateur a été supprimer avec succès !");
+                $this->addFlash('info', 'L utilisateur a ete supprimer avec succes !');
             }
         }
         else{
@@ -166,13 +170,4 @@ class AdminController extends AbstractController
     {
         return $user === $this->getUser();
     }
-    /***************************************************/
-    /* Fonction interne combinant les 2 autres
-    /***************************************************/
-    private function isNotAllowedtoRemove(User $user):bool
-    {
-        return $this->isSuperAdmin($user) || $this->isSameUser($user);
-    }
-
-
 }
