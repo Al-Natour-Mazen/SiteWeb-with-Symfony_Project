@@ -62,6 +62,10 @@
     Les informations seront ensuite affichées dans la div #ProductInfo. Si la quantité en stock du produit est
     supérieure à zéro, le bouton "Modifier" sera également affiché. #}
     <script>
+        window.addEventListener('load', () => {
+            const productSelect = document.querySelector('#ProductSelect');
+            productSelect.selectedIndex = 0;
+        });
         const productSelect = document.querySelector('#ProductSelect');
         const productInfo = document.querySelector('#ProductInfo');
 
