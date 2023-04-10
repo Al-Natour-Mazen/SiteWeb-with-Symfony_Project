@@ -66,9 +66,9 @@
             const productSelect = document.querySelector('#ProductSelect');
             productSelect.selectedIndex = 0;
         });
+
         const productSelect = document.querySelector('#ProductSelect');
         const productInfo = document.querySelector('#ProductInfo');
-
         productSelect.addEventListener('change', (event) => {
             const productId = event.target.value;
             if (productId === '') {
