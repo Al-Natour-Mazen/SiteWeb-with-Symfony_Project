@@ -115,5 +115,4 @@ class ProductController extends AbstractController
         }
         return $this->render('Vue/Product/mailnbproduct.html.twig');
     }
-
 }
