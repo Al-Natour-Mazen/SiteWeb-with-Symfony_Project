@@ -73,4 +73,6 @@
 h4{
     font-style: italic;
     color: #142d4c;
+    margin-top: 7px;
+    margin-bottom: -7px;
 }
