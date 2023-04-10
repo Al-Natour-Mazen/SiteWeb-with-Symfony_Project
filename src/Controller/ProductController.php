@@ -72,26 +72,41 @@ class ProductController extends AbstractController
      */
     #[Route('/mailing', name: 'mail')]
     #[IsGranted('ROLE_CLIENT')]
-    public function mailAction(Request $request, MailerInterface $mailer): ?Response
+    public function mailAction(Request $request, MailerInterface $mailer, EntityManagerInterface $em): ?Response
     {
         if($request->isMethod('POST')){
-
+            //on recupere le mail de l'utilisateur
             $theemail = $request->request->get('mail');
 
+            //on recupere les produits du magasin
+            $productsrepository = $em->getRepository(Produit::class);
+            $produits = $productsrepository->findAll();
+
+            //on compte le nombre de produits total
+            $nbproductmagasin = count($produits);
+            //on va compte le nombre de produits dispo à l achat
+            $nbproductmagasinDispo = 0;
+            foreach ($produits as $produit){
+                if($produit->getQuantite() > 0 ){
+                    $nbproductmagasinDispo ++;
+                }
+            }
+
+            // on creer le mail pour l'envoyer avec le corps, sujet, etc ...
             $email = (new Email())
                 ->from('H4ImmoShop@H4Shop.com')
                 ->to($theemail)
-                //->cc('cc@example.com')
-                //->bcc('bcc@example.com')
-                //->replyTo('fabien@example.com')
-                //->priority(Email::PRIORITY_HIGH)
-                ->subject('Time for Symfony Mailer!')
-                ->text('Sending emails is fun again!')
-                ->html('<p>See Twig integration for better HTML integration!</p>');
+                ->subject('Nombre De Produits dans le Magasin')
+                ->text("Bonjour,\n   Nous avons " . $nbproductmagasin . " produit(s) dans notre magasin dont " . $nbproductmagasinDispo . " qui sont disponbiles à l'achat. 
+                            \nCordialement,\nLa Direction du H4ImmoShop.")
+                ;
 
+            //on envoie le mail
             $mailer->send($email);
-            $this->addFlash('info', 'Le mail a ete envoye, checkez votre boite mail :)');
-           // return $this->redirectToRoute('product_listproduct');
+            // on informe l'utilisateur
+            $this->addFlash('info', 'Mail envoye avec succes :)');
+            // on redergie vers la liste des produits
+            return $this->redirectToRoute('product_listproduct');
         }
         return $this->render('Vue/Product/mailnbproduct.html.twig');
     }
