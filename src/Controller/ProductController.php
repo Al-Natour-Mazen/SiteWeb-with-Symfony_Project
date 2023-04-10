@@ -77,6 +77,11 @@ class ProductController extends AbstractController
         if($request->isMethod('POST')){
             //on recupere le mail de l'utilisateur
             $theemail = $request->request->get('mail');
+            //on verifie que c'est pas un mail vide
+            if($theemail === ""){
+                $this->addFlash('info', 'Veuillez entrez un mail valide !');
+                return $this->redirectToRoute('product_mail');
+            }
 
             //on recupere les produits du magasin
             $productsrepository = $em->getRepository(Produit::class);
