@@ -63,13 +63,14 @@ class ProductController extends AbstractController
         return $this->render("Vue/Product/productList.html.twig", ['produits' => $products, 'panier' => $orders]);
     }
 
+
     /***************************************************/
     /*  Envoie d'un mail contenant le nbr de produits dispo
     /***************************************************/
     /**
      * @throws TransportExceptionInterface
      */
-    #[Route('/mail', name: 'mail')]
+    #[Route('/mailing', name: 'mail')]
     #[IsGranted('ROLE_CLIENT')]
     public function mailAction(Request $request, MailerInterface $mailer): ?Response
     {
@@ -90,7 +91,7 @@ class ProductController extends AbstractController
 
             $mailer->send($email);
         }
-        return $this->redirectToRoute('product_listproduct');
+        return $this->render('/Vue/Product/mailproduct.html.twig');
     }
 
 }
