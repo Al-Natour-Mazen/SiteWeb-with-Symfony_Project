@@ -9,8 +9,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 #[Route('/product', name: 'product_')]
 class ProductController extends AbstractController
@@ -59,4 +62,35 @@ class ProductController extends AbstractController
         $products = $productsrepository->findAll();
         return $this->render("Vue/Product/productList.html.twig", ['produits' => $products, 'panier' => $orders]);
     }
+
+    /***************************************************/
+    /*  Envoie d'un mail contenant le nbr de produits dispo
+    /***************************************************/
+    /**
+     * @throws TransportExceptionInterface
+     */
+    #[Route('/mail', name: 'mail')]
+    #[IsGranted('ROLE_CLIENT')]
+    public function mailAction(Request $request, MailerInterface $mailer): ?Response
+    {
+        if($request->isMethod('POST')){
+
+            $theemail = $request->request->get('mail');
+
+            $email = (new Email())
+                ->from('H4ImmoShop@H4Shop.com')
+                ->to($theemail)
+                //->cc('cc@example.com')
+                //->bcc('bcc@example.com')
+                //->replyTo('fabien@example.com')
+                //->priority(Email::PRIORITY_HIGH)
+                ->subject('Time for Symfony Mailer!')
+                ->text('Sending emails is fun again!')
+                ->html('<p>See Twig integration for better HTML integration!</p>');
+
+            $mailer->send($email);
+        }
+        return $this->redirectToRoute('product_listproduct');
+    }
+
 }
