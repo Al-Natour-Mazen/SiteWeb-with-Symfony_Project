@@ -1,0 +1,15 @@
+{% extends "Layouts/body.html.twig" %}
+
+{% block main_title %}
+    {{ parent() }} : Mailing
+{% endblock %}
+
+{% block vue %}
+    <form method="post">
+        <h3>Recevez un mail avec le nombre de produit en stock!</h3>
+        <label> Adresse Mail
+            <input type="email" name="mail">
+        </label>
+        <input type="submit" value="Valider">
+    </form>
+{% endblock %}

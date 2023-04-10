@@ -90,8 +90,10 @@ class ProductController extends AbstractController
                 ->html('<p>See Twig integration for better HTML integration!</p>');
 
             $mailer->send($email);
+            $this->addFlash('info', 'Le mail a ete envoye, checkez votre boite mail :)');
+           // return $this->redirectToRoute('product_listproduct');
         }
-        return $this->render('/Vue/Product/mailproduct.html.twig');
+        return $this->render('Vue/Product/mailnbproduct.html.twig');
     }
 
 }
