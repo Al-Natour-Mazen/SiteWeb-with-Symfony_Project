@@ -10,6 +10,7 @@ namespace App\Controller;
 use App\Entity\Order;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Service\CheckPassword;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -29,6 +30,7 @@ class AdminController extends AbstractController
     #[IsGranted('ROLE_SUPERADMIN')]
     public function createAdminAction(EntityManagerInterface $em,
                                       UserPasswordHasherInterface $passwordHasher,
+                                      CheckPassword $checkPassword,
                                       Request $requete): Response
     {
         // creation de la nouvelle personne
@@ -42,14 +44,19 @@ class AdminController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             $NewAdmin->setRoles(['ROLE_ADMIN']);
 
-            //on hashe le mdp de l'utilisateur
-            $hashedPassword = $passwordHasher->hashPassword($NewAdmin, $NewAdmin->getPassword());
-            $NewAdmin->setPassword($hashedPassword);
+            if (!$checkPassword->check($NewAdmin->getPassword())) {
+                $this->addFlash('info','le mot de passe n est pas valide (service)');
+            }
+            else {
+                //on hashe le mdp de l'utilisateur
+                $hashedPassword = $passwordHasher->hashPassword($NewAdmin, $NewAdmin->getPassword());
+                $NewAdmin->setPassword($hashedPassword);
 
-            $em->persist($NewAdmin);
-            $em->flush();
-            $this->addFlash('info','l ajout de l admin a ete effectue !');
-            return $this->redirectToRoute('app_accueil');
+                $em->persist($NewAdmin);
+                $em->flush();
+                $this->addFlash('info','l ajout de l admin a ete effectue !');
+                return $this->redirectToRoute('app_accueil');
+            }
         }
 
         $args=array(
