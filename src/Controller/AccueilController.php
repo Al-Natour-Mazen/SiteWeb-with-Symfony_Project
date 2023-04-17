@@ -41,7 +41,7 @@ class AccueilController extends AbstractController
         if($user !== null) {
             $nbproduits = count($user->getOrders()); // On compte tous les produits dans son panier
             $isAuth = true;
-            $nameUser = $user->getNom() .' ' . $user->getPrenom();
+            $nameUser = $user->getNom() . ' ' . $user->getPrenom();
             if ($this->isGranted('ROLE_SUPERADMIN'))
                 $isSuperAdmin = true;
             if ($this->isGranted('ROLE_ADMIN'))

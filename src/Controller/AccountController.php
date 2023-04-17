@@ -73,7 +73,7 @@ class AccountController extends AbstractController
             $TheNewOne->setRoles(['ROLE_CLIENT']);
 
             if (!$checkPassword->check($TheNewOne->getPassword())) {
-                $this->addFlash('info','Votre mot de passe n\'est pas valide (service)');
+                $this->addFlash('info','Votre mot de passe n est pas valide (service)');
                 return $this->redirectToRoute('account_createaccount');
             }
             else {
@@ -103,23 +103,31 @@ class AccountController extends AbstractController
     )]
     public function editProfileAction(EntityManagerInterface $em,
                                       UserPasswordHasherInterface $passwordHasher,
+                                      CheckPassword $checkPassword,
                                       Request $requete): Response
     {
         $user = $this->getUser();
 
+        //on cree le formulaire et on l'hydrate avec la personne déjà connecté
         $form = $this->createForm(UserType::class,$user);
         $form->add('modify',SubmitType::class,['label' => 'modifier votre profile']);
         $form->handleRequest($requete);
 
         if($form->isSubmitted() && $form->isValid()){
-            $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
-            $user->setPassword($hashedPassword);
-            $em->flush();
-            $this->addFlash('info','Votre compte a été modifier !');
-            if($this->isGranted('ROLE_CLIENT'))
-                return $this->redirectToRoute('product_listproduct');
-            else if ($this->isGranted('ROLE_SUPERADMIN' ))
-                return $this->redirectToRoute('app_accueil');
+
+            if (!$checkPassword->check($user->getPassword())) {
+                $this->addFlash('info','Votre mot de passe n est pas valide (service)');
+            }
+            else {
+                $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
+                $user->setPassword($hashedPassword);
+                $em->flush();
+                $this->addFlash('info','Votre compte a été modifier !');
+                if($this->isGranted('ROLE_CLIENT'))
+                    return $this->redirectToRoute('product_listproduct');
+                else if ($this->isGranted('ROLE_SUPERADMIN' ))
+                    return $this->redirectToRoute('app_accueil');
+            }
         }
 
         $args=array(

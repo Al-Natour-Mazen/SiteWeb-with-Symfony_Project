@@ -60,7 +60,7 @@
     transform: translateX(-35%);
 }
 .main-menu > li:nth-child(9) {
-    transform: translateX(-31%)
+    transform: translateX(-31%);
 }
 .main-menu > li:hover:not(.active) {
     background: linear-gradient(to right, var(--green-color),#93c5fd);
