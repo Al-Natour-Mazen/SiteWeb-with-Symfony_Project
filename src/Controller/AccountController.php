@@ -72,9 +72,9 @@ class AccountController extends AbstractController
         if($form->isSubmitted() && $form->isValid()){
             $TheNewOne->setRoles(['ROLE_CLIENT']);
 
+            // on vérifie le mdp avec le service
             if (!$checkPassword->check($TheNewOne->getPassword())) {
                 $this->addFlash('info','Votre mot de passe n est pas valide (service)');
-                return $this->redirectToRoute('account_createaccount');
             }
             else {
                 //on hashe le mdp de l'utilisateur
@@ -114,7 +114,7 @@ class AccountController extends AbstractController
         $form->handleRequest($requete);
 
         if($form->isSubmitted() && $form->isValid()){
-
+            // on vérifie le mdp avec le service
             if (!$checkPassword->check($user->getPassword())) {
                 $this->addFlash('info','Votre mot de passe n est pas valide (service)');
             }

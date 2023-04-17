@@ -13,8 +13,8 @@ class CheckPassword
     {
         return
             strlen($pswd) >= 6 &&
-            $pswd != 'azerty' &&
-            $pswd != 'qwerty' &&
-            $pswd != '123456';
+            $pswd != "azerty" &&
+            $pswd != "qwerty" &&
+            $pswd != "123456";
     }
 }
