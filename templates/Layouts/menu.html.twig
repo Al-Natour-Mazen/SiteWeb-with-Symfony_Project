@@ -22,16 +22,28 @@
                 <li> <a href="{{ path('account_editProfile') }}">Gérer Mon profil</a></li>
                 <li><a href="{{ path('account_disconnect') }}">Déconnexion</a></li>
             {% endif %}
+            <li>
             {% if isAuth == false %}
-                <li><img src="{{ asset('images/Logo/anonyme.png') }}" alt="Utilisateur pas connecté" width="100px" height="100px" title="Vous êtes un Utilisateur Anonyme"></li>
+                <img src="{{ asset('images/Logo/anonyme.png') }}" alt="Utilisateur pas connecté" width="100px" height="100px" title="Vous êtes un Utilisateur Anonyme">
             {% else %}
                 {% if isAdmin == true%}
-                    <li><img src="{{ asset('images/Logo/Admin.png') }}" alt="Admin connecté" width="50px" height="50px" title="Vous êtes un Admin" ></li>
+                    <img src="{{ asset('images/Logo/Admin.png') }}" alt="Admin connecté" width="50px" height="50px" title="{{ nameUser }}, vous êtes un Admin !" >
                 {% endif %}
                 {%if isSuperAdmin == true %}
-                     <li><img src="{{ asset('images/Logo/SuperAdmin.png') }}" alt="SuperAdmin connecté" width="50px" height="50px" title="Vous êtes un SuperAdmin"></li>
+                     <img src="{{ asset('images/Logo/SuperAdmin.png') }}" alt="SuperAdmin connecté" width="50px" height="50px" title="{{ nameUser }}, vous êtes un SuperAdmin !">
                 {% endif %}
             {% endif %}
+            </li>
         </ul>
     </nav>
 {% endblock %}
+
+{#
+
+/********************************************/
+/*          PROJET TECHNOLOGIE WEB 2        */
+/*     AL NATOUR MAZEN && CAILLAUD TOM      */
+/********************************************/
+
+#}
+

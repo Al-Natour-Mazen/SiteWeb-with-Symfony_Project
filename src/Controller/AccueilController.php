@@ -1,5 +1,10 @@
 <?php
 
+/********************************************/
+/*          PROJET TECHNOLOGIE WEB 2        */
+/*     AL NATOUR MAZEN && CAILLAUD TOM      */
+/********************************************/
+
 namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,12 +35,13 @@ class AccueilController extends AbstractController
         $isAdmin = false;
         $isSuperAdmin = false;
         $isClient = false;
-
+        $nameUser = "Anonyme";
         $nbproduits = 0;
 
         if($user !== null) {
             $nbproduits = count($user->getOrders()); // On compte tous les produits dans son panier
             $isAuth = true;
+            $nameUser = $user->getNom() .' ' . $user->getPrenom();
             if ($this->isGranted('ROLE_SUPERADMIN'))
                 $isSuperAdmin = true;
             if ($this->isGranted('ROLE_ADMIN'))
@@ -44,6 +50,7 @@ class AccueilController extends AbstractController
                 $isClient = true;
         }
         $args = array(
+            'nameUser' =>$nameUser,
             'isAuth'=> $isAuth,
             'isAdmin' => $isAdmin,
             'isSuperAdmin' => $isSuperAdmin,
